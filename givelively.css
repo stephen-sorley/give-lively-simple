@@ -1,0 +1,530 @@
+.gl-simple-donation-widget {
+  @layer theme {
+    /* Default settings, can be overriden by project settings. */
+    --gl-color-fg: light-dark(#4A4A4A, #FFF);
+    --gl-color-bg: light-dark(#FFF, #164046);
+    --gl-color-accent: light-dark(#0CA1B3, #00CBBC);
+    --gl-color-error: light-dark(#9f0712, #ff6467);
+    --gl-color-focus: light-dark(#F2853A, #F9C727);
+    --gl-radius: 0.5rem;
+    --gl-spacing-2xs: 0.25em;
+    --gl-spacing-xs: 0.5em;
+    --gl-spacing-sm: 1em;
+    --gl-spacing-md: 1.5em;
+    --gl-duration: 120ms;
+    @media (prefers-reduced-motion: reduce) {
+      --gl-duration: 0ms;
+    }
+    --gl-section-shadow: 0 4px 6px -1px rgba(0 0 0 0.1), 0 2px 4px -2px rgba(0 0 0 0.1);
+
+    --gl-button-shadow: 0px 4px 4px -2px color-mix(in oklch, var(--gl-color-accent), transparent 80%);
+    --gl-color-checked: color-mix(in oklch, var(--gl-color-accent), transparent 95%);
+
+    font-family: Avenir, Montserrat, Corbel, 'URW Gothic', source-sans-pro, sans-serif; /* Geometric Humanist - modernfontstacks.com */
+    font-size: 1rem;
+  }
+
+  @layer components {
+    padding: var(--gl-spacing-sm);
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 40ch;
+
+    border-radius: var(--gl-radius);
+    border: 2px solid var(--gl-color-accent);
+    box-shadow: var(--gl-section-shadow);
+
+    .sr-only { /* the standard visibly-hidden/sr-only class from Tailwind CSS. */
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
+    svg {
+      width: 1lh;
+      height: 1lh;
+      pointer-events: none;
+    }
+
+    form {
+      width: 100%;
+      color: var(--gl-color-fg);
+      background-color: var(--gl-color-bg);
+
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: center;
+    }
+
+    label {
+      display: block;
+      cursor: pointer;
+      justify-content: center;
+      align-items: center;
+
+      /* Style label for non-radio input fields. */
+      &:has(input:not([type="radio"])) {
+        font-size: 1.06em;
+        font-weight: 500;
+        & > .gl-required {
+          font-size: 0.9em;
+          font-weight: 300;
+          color: color-mix(in oklch, currentColor, transparent 10%);
+        }
+      }
+    }
+
+    input {
+      /* Reset all input styles to undecorated. */
+      appearance: none;
+      border: none;
+      box-shadow: none;
+      outline: none;
+    }
+    /* Styling for non-radio input fields. */
+    input:not([type="radio"]):not(.gl-focus-container *),
+    .gl-focus-container:not(:has(input[type="radio"]))  {
+      border: 2px solid var(--gl-color-accent);
+      border-radius: var(--gl-radius);
+      width: 100%;
+      padding: 0.35em 1em;
+      cursor: text;
+
+      font-weight: 400;
+      margin-block-start: var(--gl-spacing-2xs);
+
+      transition: 120ms box-shadow border-color ease-in-out;
+      &:hover, &:focus-visible {
+        --gl-focus-border: color-mix(in oklch, var(--gl-color-accent), var(--gl-color-bg) 40%);
+        box-shadow: 0 0 0 1px var(--gl-focus-border);
+        border-color: var(--gl-focus-border);
+      }
+      
+      /* style any explanatory text after the input box */
+      & ~ div {
+        color: color-mix(in oklch, currentColor, transparent 10%);
+        font-size: 0.75em;
+        font-weight: 300;
+        margin-block-start: var(--gl-spacing-2xs);
+        margin-inline: 1ch;
+      }
+    }
+
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1ch;
+      cursor: pointer;
+      width: 100%;
+      transition: var(--gl-duration) background-color ease-in-out;
+      padding-inline: var(--gl-spacing-sm);
+      border-radius: 9999px; /* pill shape */
+      font-size: 1.06em;
+      font-weight: 500;
+
+      & + & { /* space between buttons */
+        margin-block-start: var(--gl-spacing-sm);
+      }
+
+      &.gl-primary {
+        padding-block: var(--gl-spacing-sm);
+        color: var(--gl-color-bg);
+
+        background-color: var(--gl-color-fg);
+        &:hover, &:focus-visible {
+          background-color: color-mix(in oklch, var(--gl-color-fg), var(--gl-color-bg) 10%);
+        }
+      }
+
+      &.gl-secondary {
+        padding-block: var(--gl-spacing-2xs);
+        color: var(--gl-color-fg);
+        border: 3px solid color-mix(in oklch, var(--gl-color-fg), var(--gl-color-bg) 30%);
+
+        background-color: var(--gl-color-bg);
+        &:hover, &:focus-visible {
+          background-color: var(--gl-color-checked);
+        }
+      }
+
+      &.gl-close {
+        border-radius: 0;
+        width: fit-content;
+        height: auto;
+
+        padding: 0.5em;
+        svg {
+          width: 1em;
+          height: 1em;
+        }
+
+        transition: var(--gl-duration) color ease-in-out;
+
+        color: color-mix(in oklch, var(--gl-color-fg), var(--gl-color-bg) 25%);
+        &:hover, &:focus-visible {
+          color: color-mix(in oklch, var(--gl-color-fg), var(--gl-color-bg) 10%);
+          background-color: var(--gl-color-checked);
+        }
+      }
+
+      &.gl-ded-button {
+        &[data-state="new"] {
+          svg { fill: transparent; }
+          .gl-ded-button-new { display: inline; }
+          .gl-ded-button-edit { display: none; }
+        }
+        &[data-state="edit"] {
+          svg { fill: currentColor; }
+          .gl-ded-button-new { display: none; }
+          .gl-ded-button-edit { display: inline; }
+        }
+      }
+
+      &.gl-ded-close {
+        font-size: 0.9em;
+        padding: var(--gl-spacing-sm);
+        margin-left: auto;
+      }
+    }
+
+    /* Set spacing between any combination of fieldsets and error groups. */
+    :is(fieldset, .gl-err-group) + :is(fieldset, .gl-err-group) {
+      margin-block-start: var(--gl-spacing-md);
+    }
+
+    /* Set spacing between a fieldset/error group and a subsequent button (also the reverse). */
+    :is(fieldset, .gl-err-group) + button,
+    button + :is(fieldset, .gl-err-group) {
+      margin-block-start: var(--gl-spacing-md);
+    }
+
+    /* Fieldset: a radio button group, where each radio button just looks like a regular button */
+    fieldset {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: start;
+      width: 100%;
+      gap: var(--gl-spacing-xs); /* space button radio buttons, in both dimensions */
+
+      /*
+        Inputs in a fieldset are a radio button group.
+        Hide the radio buttons completely, only show the label that wraps them - the
+        user will be able to click on / keyboard focus the label instead.
+      */
+      input {
+        position: absolute;
+        padding: none;
+        margin: none;
+        width: 0;
+        height: 0;
+      }
+
+      /*
+        Style the labels that wrap each radio button.
+      */
+      label {
+        .gl-simple-donation-widget:has(label.gl-freq-recurring input:checked) & {
+          &.gl-amt-value-onetime {
+            display: none;
+          }
+        }
+        .gl-simple-donation-widget:not(:has(label.gl-freq-recurring input:checked)) & {
+          &.gl-amt-value-recurring {
+            display: none;
+          }
+        }
+        position: relative;
+        text-align: center;
+        flex: 1 0 fit-content; /* don't shrink to fit text, grow to fill available space along row, use width of text content as basis */
+        padding: var(--gl-spacing-xs);
+        user-select: none; /* make text unselectable by user (since it functions as a button) */
+        
+        border: 1px solid var(--gl-color-accent);
+        border-radius: var(--gl-radius);
+
+        transition: var(--gl-duration) box-shadow background-color text-shadow ease-in-out;
+        box-shadow: var(--gl-button-shadow);
+        background-color: var(--gl-color-bg);
+        &:has(:checked) {
+          box-shadow: 0 0 0 2px var(--gl-color-accent);
+          text-shadow: 0.1px 0 currentColor, -0.1px 0 currentColor; /* simulate a slight bold, without changing letter spacing or position*/
+        }
+        &:hover, &:has(:checked) {
+          background-color: var(--gl-color-checked);
+        }
+
+        /* Specific styling for the "Custom Amount" radio button. */
+        &:has([value="other"]) {
+          flex-basis: 100%; /* Force custom button onto its own line. */
+
+          &:has(:checked) {
+            padding-block-end: 0;
+            /* When checked, remove bottom border so we can combine seamlessly with the amount input field. */
+            box-shadow:
+              0 -2px 0 0 var(--gl-color-accent),
+              -2px 0 0 0 var(--gl-color-accent),
+              2px 0 0 0 var(--gl-color-accent);
+            border-end-end-radius: 0;
+            border-end-start-radius: 0;
+            border-block-end-color: transparent;
+          }
+        }
+      }
+    }
+
+    .gl-amount { /* Error group for amount input. */
+
+      & > label { /* Custom amount input field. */
+        width: 100%;
+        text-align: center;
+      
+        /* Border around currency spans and the input box itself. */
+        .gl-focus-container {
+          display: flex;
+          align-items: center;
+          background-color: var(--gl-color-bg);
+          gap: 0.35em;
+
+          span { /* gray out the currency prefix and suffix */
+            color: color-mix(in oklch, currentColor, transparent 20%);
+          }
+
+          input {
+            width: 100%;
+          }
+        }
+
+        /* If there's no fieldset right before this label, style it as a standalone input. */
+        &:not(fieldset + label) {
+          .gl-other-label-1 { display: none; }  /* turn off "Custom Amount:" sr-only text */
+          .gl-other-label-2 { display: block; } /* turn on "Donation Amount: text */
+        }
+      }
+
+      /* Custom amount input box, if it has a fieldset right before it (part of custom amount radio button). */
+      & > fieldset + label {
+        display: none;
+        .gl-other-label-1 { display: inline; } /* turn on "Custom Amount:" sr-only text */
+        .gl-other-label-2 { display: none; }   /* turn off "Donation Amount: text */
+        padding: var(--gl-spacing-xs) var(--gl-spacing-sm);
+
+        /* Set styles so that the label looks like part of the last button in the fieldset. */
+        background-color: var(--gl-color-checked);
+
+        box-shadow:
+          0 2px 0 0 var(--gl-color-accent),
+          -2px 0 0 0 var(--gl-color-accent),
+          2px 0 0 0 var(--gl-color-accent);
+
+        border: 1px solid var(--gl-color-accent);
+        border-radius: var(--gl-radius);
+        
+        border-start-end-radius: 0;
+        border-start-start-radius: 0;
+        border-block-start-color: transparent;
+      }
+      /* Display the custom input box when the "Custom Amount" radio is selected. */
+      & > fieldset:has(input[value="other"]:checked) + label {
+        display: block;
+      }
+    }
+
+    .gl-err-group {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: center;
+      width: 100%;
+
+      .gl-err {
+        margin-block: var(--gl-spacing-2xs);
+        width: 100%;
+        text-align: center;
+        font-size: 0.9em;
+        color: var(--gl-color-error);
+
+        svg {
+          display: none;
+          margin-inline-end: 0.25em;
+        }
+      }
+      &:has([aria-invalid="true"]) .gl-err svg {
+        display: inline;
+      }
+    }
+    
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    dialog {
+      --fade-duration: calc(var(--gl-duration) * 2);
+
+      top: 50%;
+      left: 50%;
+
+      overflow-x: hidden;
+      overflow-y: auto;
+      scrollbar-gutter: auto;
+      height: 100%;
+      max-height: 94svh;
+      width: 100%;
+      padding: 0;
+      margin: 0;
+      border: 1px solid var(--gl-color-accent);
+      border-radius: calc(var(--gl-radius) * 1.5);
+      box-shadow: var(--gl-section-shadow);
+
+      &.gl-donate-modal {
+        max-width: min(94svw, 500px);
+        color-scheme: light;
+      }
+
+      &.gl-ded-modal {
+        max-width: min(94svw, 38ch);
+        height: fit-content;
+        background-color: var(--gl-color-bg);
+        flex-direction: column;
+        &[open] {
+          display: flex;
+        }
+
+        form {
+          padding-inline: var(--gl-spacing-sm);
+          padding-block-end: var(--gl-spacing-sm);
+        }
+
+        .gl-close {
+          margin-block: 4px;
+          margin-inline-start: auto;
+          margin-inline-end: calc(var(--spacing-sm) - 0.5em);
+        }
+      }
+
+      /* Animate dialog entrance/exit, and disable scrolling of main page while dialog is open. */
+      transition:
+        transform var(--fade-duration) ease-out,
+        opacity var(--fade-duration) ease-in,
+        display var(--fade-duration) allow-discrete,
+        overlay var(--fade-duration) allow-discrete;
+      overscroll-behavior: contain;
+
+      &::backdrop {
+        transition:
+          background-color var(--fade-duration) ease-in,
+          backdrop-filter var(--fade-duration) ease-in,
+          display var(--fade-duration) allow-discrete,
+          overlay var(--fade-duration) allow-discrete;
+        overflow: hidden;
+        overscroll-behavior: contain;
+      }
+
+      /* Step 3: on the way out */
+      &:not([open]),
+      &.gl-is-closing { /* workaround for Safari bug - Safari hides the dialog immediately on close and does not perform the exit transition. */
+        opacity: 0;
+        transform: translate(-50%, -35%);
+        &::backdrop {
+          background-color: transparent;
+          backdrop-filter: blur(0px);
+        }
+      }
+
+      /* Step 2: open */
+      &[open]:not(.gl-is-closing) {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+        &::backdrop {
+          background-color: rgba(0 0 0 0.6);
+          backdrop-filter: blur(8px);
+        }
+
+        /* Step 1: on the way in */
+        @starting-style {
+          opacity: 0;
+          transform: translate(-50%, -65%);
+          &::backdrop {
+            background-color: transparent;
+            backdrop-filter: blur(0px);
+          }
+        }
+      }
+
+      /* Style the loading spinner, if any (only used for dialogs that embed an iframe). */
+      &:has(.gl-spinner) {
+        container-type: inline-size;
+      }
+      .gl-spinner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        width: 25cqmin;
+        height: 25cqmin;
+        color: var(--gl-color-accent);
+
+        /* Rules that create the spinning animation. */
+        g {
+          transform-origin: center;
+          animation: gl-spinner-outer 2s linear infinite;
+          circle {
+            stroke-linecap: round;
+            animation: gl-spinner-inner 1.5s ease-in-out infinite;
+          }
+        }
+      }
+      &:is(:not([open]),[data-loaded]) svg.gl-spinner {
+        display: none;
+      }
+    }
+
+    /* error ring */
+    [aria-invalid="true"]:not(.gl-focus-container *), /* I have aria-invalid="true" and I'm not inside a focus container, OR */
+    .gl-focus-container:has([aria-invalid="true"]) {  /* I'm a focus container and a descendant has aria-invalid="true" */
+      outline: 3px solid var(--gl-color-error);
+      outline-offset: 4px;
+    }
+  }
+
+  @layer theme {
+    /* focus ring - define in theme layer (lowest priority in Tailwind) so it can be overridden easily by the embedding project */
+    :focus-visible:not(.gl-focus-container *), /* I have focus-visible and I'm not within a focus container, OR */
+    .gl-focus-container:has(:focus-visible) {  /* I'm a focus container and a descendant has focus-visible */
+      outline: 0.1875rem solid var(--gl-color-focus);
+      outline-offset: 0.25rem;
+    }
+  }
+}
+
+@keyframes gl-spinner-outer {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes gl-spinner-inner {
+  0% {
+    stroke-dasharray: 0 150;
+    stroke-dashoffset: 0;
+  }
+  47.5% {
+    stroke-dasharray: 42 150;
+    stroke-dashoffset: -16;
+  }
+  95%,100% {
+    stroke-dasharray: 42 150;
+    stroke-dashoffset: -59;
+  }
+}
