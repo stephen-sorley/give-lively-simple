@@ -1,0 +1,18 @@
+{
+	"name": "give-lively-simple",
+	"description": "UNOFFICIAL simple donation widget for give lively with improved accessibility and performance. Transpilation targeted at baseline-widely-available.",
+	"version": "0.1",
+	"type": "module",
+	"browserslist": [
+		"extends browserslist-config-baseline"
+	],
+	"scripts": {
+		"build": "./build.sh"
+	},
+	"devDependencies": {
+		"browserslist-config-baseline": "^0.5.0",
+		"lightningcss-cli": "^1.32.0",
+		"tsdown": "^0.22.3",
+		"typescript": "^6.0.3"
+	}
+}
