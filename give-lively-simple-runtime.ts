@@ -60,6 +60,7 @@
       }
 
       if (!supports_invoker && dialog?.id) {
+        // Manually add event listeners to open and close buttons, if Invoker API isn't supported.
         const invokers = document.querySelectorAll(`.gl-simple-donation-widget [commandfor="${dialog.id}"]`);
         for (const invoker of invokers) {
           const command = invoker.getAttribute("command");
@@ -74,7 +75,7 @@
         }
       }
     });
-  } // END polyfills and bugfixes for dialogs
+  } // END polyfills and bugfixes for dialogs -----
 
   const donateForm = qsroot("> form") as HTMLFormElement;
 
@@ -109,10 +110,10 @@
   const iframeUrl = new URL(`https://secure.givelively.org/donate/${donateForm.dataset.slug}`);
   const thisUrl = new URL(document.URL);
 
-  const locale = donateForm.dataset.locale;
+  const locale = donateForm.dataset.locale || "en-US";
   const settings: Intl.NumberFormatOptions = {
     style: "currency",
-    currency: donateForm.dataset.currency,
+    currency: donateForm.dataset.currency || "USD",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   };
