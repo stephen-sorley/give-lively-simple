@@ -5,7 +5,16 @@
     --gl-duration-long: 0ms !important;
   }
 
-  /* Tailwind CSS layer priorities: theme < base < components < utilities */
+  /*
+    Tailwind CSS layer priorities are: theme < base < components < utilities
+
+    Use theme for stuff that you want to be easily overridden, base for project-wide
+    css, and components for component-level css. Tailwind utility classes are
+    all defined in the utilities layer, so they override other CSS rules.
+
+    For this component, we use theme for configuration variables (so that they
+    can be overridden by project-wide settings), and components for internal rules.
+   */
 
   @layer theme {
     /* Default settings, can be overriden by project settings. */
