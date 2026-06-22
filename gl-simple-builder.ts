@@ -1,4 +1,25 @@
-
+/**
+ * gl-simple-builder
+ * 
+ * Exports:
+ *   [function] createHTML(opt: CreateHTMLOptions)
+ *   [type] CreateHTMLOptions
+ * 
+ * Script that accepts configuration options, and returns a string containing
+ * the static HTML of a donation widget.
+ * 
+ * This script has no dependencies (pure vanilla TS), and can be run either on
+ * the browser or on server-side environments.
+ * 
+ * The widget's HTML will require the following two files to be embedded or imported
+ * into the final page in order to work properly (see dist/ directory):
+ *   gl-simple.min.css
+ *   gl-simple-runtime.min.js
+ * 
+ * A minimized and transpiled version of this file is also included in dist/, if
+ * you want to use it client-side. 
+ */
+  
 export interface CreateHTMLOptions {
   /**
    * The slug that identifies the nonprofit giving page you wish to target.
@@ -25,7 +46,7 @@ export interface CreateHTMLOptions {
   slug: string,
 
   /**
-   * What amounts to suggest to the donor.
+   * What amounts to suggest to the donor (must be whole numbers).
    * 
    * If not provided, an empty input box will be shown for the donor to type
    * their amount into.
@@ -43,7 +64,7 @@ export interface CreateHTMLOptions {
 
   /**
    * What amounts to suggest to the donor for recurring donations, if you wish
-   * those amounts to be different.
+   * those amounts to be different (must be whole numbers).
    * 
    * If not provided, will just use the same suggestedAmounts as non-recurring.
    * 
@@ -93,6 +114,7 @@ export interface CreateHTMLOptions {
   ariaLabel?: string,
 };
 
+// Utils and info for the selected currency and locale.
 type CurrencyFormat = {
   withSymbol: Intl.NumberFormat,
   withName: Intl.NumberFormat
@@ -162,7 +184,7 @@ const makeAmountRadios = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string
   const amountButtons = iopt.suggestedAmounts?.map((amount) : amountButton => { return {
     title: curr.withSymbol.format(amount),
     alt: curr.withName.format(amount),
-    value: String(amount),
+    value: String(Math.ceil(amount)),
     id: "gl-amt-" + amount,
     className: separateRecurring? "gl-amt-value-onetime" : undefined,
   }}) || [];
@@ -170,7 +192,7 @@ const makeAmountRadios = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string
     iopt.suggestedRecurringAmounts?.forEach(amount => amountButtons?.push({
       title: curr.withSymbol.format(amount),
       alt: curr.withName.format(amount),
-      value: String(amount),
+      value: String(Math.ceil(amount)),
       id: "gl-amt-recurring" + amount,
       className: "gl-amt-value-recurring",
     }));
