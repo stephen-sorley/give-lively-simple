@@ -365,7 +365,7 @@ const makeDedicationModal = (iopt: CreateHTMLOptions): string => {
       <span class="sr-only">Close</span>
     </button>
 
-    <form novalidate aria-label=${ariaLabel} ${pmFormAttrs}>
+    <form novalidate ${attr("aria-label", ariaLabel)} ${pmFormAttrs}>
       <fieldset class="gl-focus-container">
         <legend class="sr-only">Dedication Type</legend>
         ${makeDedicationTypeRadios()}
