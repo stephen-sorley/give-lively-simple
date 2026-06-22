@@ -2,8 +2,10 @@
   "compilerOptions": {
     /* Base Options */
     "target": "ES2022",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "es2022",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
     "lib": ["ES2022", "DOM"],
 
     /* Strictness */
