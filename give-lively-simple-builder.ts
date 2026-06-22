@@ -205,6 +205,12 @@ const makeAmountField = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string 
     );
   }
 
+  // If there's only on suggested value, prefill the amount input box with it.
+  let defaultValue;
+  if (iopt.suggestedAmounts?.length === 1) {
+    defaultValue = String(iopt.suggestedAmounts[0]);
+  }
+
   // Add the input box that lets users enter a custom donation amount.
   ret.push(`
       <label for="gl-other-input" class="gl-other-entry">
@@ -214,10 +220,8 @@ const makeAmountField = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string 
         </div>
         <div class="gl-focus-container">
           <span aria-hidden="true">${curr.symbol}</span>
-          <input type="text" id="gl-other-input" inputmode="numeric" name="otherAmount" ${attr("required", !hasButtons)}
-            value={defaultValue}
-          />
-          <span aria-hidden="true">{currencyCode}</span>
+          <input type="text" id="gl-other-input" inputmode="numeric" name="otherAmount" ${attr("required", !hasButtons)} ${attr("value", defaultValue)} />
+          <span aria-hidden="true">${iopt.currencyCode}</span>
         </div>
       </label>`
   );
@@ -236,7 +240,7 @@ const makeAmountField = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string 
           </symbol>
           <use href="#gl-icon-warning"/>
         </svg>
-        <span aria-live="polite"/>
+        <span aria-live="polite"></span>
       </div>`
   );
 
@@ -330,7 +334,14 @@ const makeDedicationModal = (iopt: CreateHTMLOptions): string => {
 
   return `
   <dialog id="gl-ded-modal" class="gl-ded-modal" closedby="any">
-    <div tabindex="-1" autofocus class="sr-only" hidden/>
+    <div tabindex="-1" autofocus class="sr-only" hidden></div>
+
+    <button type="button" class="gl-close" commandfor="gl-ded-modal" command="request-close">
+      <svg aria-hidden="true" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 6l-12 12" /><path d="M6 6l12 12" />
+      </svg>
+      <span class="sr-only">Close</span>
+    </button>
 
     <form novalidate aria-label=${ariaLabel} ${pmFormAttrs}>
       <fieldset class="gl-focus-container">
@@ -350,7 +361,7 @@ const makeDedicationModal = (iopt: CreateHTMLOptions): string => {
 
         <div class="gl-err">
           <svg aria-hidden="true"><use href="#gl-icon-warning"/></svg>
-          <span aria-live="polite"/>
+          <span aria-live="polite"></span>
         </div>
       </div>
 
@@ -368,7 +379,7 @@ const makeDedicationModal = (iopt: CreateHTMLOptions): string => {
 
         <div class="gl-err">
           <svg aria-hidden="true"><use href="#gl-icon-warning"/></svg>
-          <span aria-live="polite"/>
+          <span aria-live="polite"></span>
         </div>
       </div>
 
