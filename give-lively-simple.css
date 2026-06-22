@@ -590,3 +590,14 @@
     stroke-dashoffset: -59;
   }
 }
+
+/* Fix for lightningcss's polyfill of light-dark() - it requires color-scheme
+ * to be explicitly set, unlike the real light-dark() function.
+ *
+ * You can remove this once light-dark hits baseline widely available (Nov 2026).
+ */
+@layer theme {
+  :where(:root) {
+    color-scheme: light dark;
+  }
+}

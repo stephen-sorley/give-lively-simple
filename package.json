@@ -1,10 +1,10 @@
 {
 	"name": "give-lively-simple",
-	"description": "UNOFFICIAL simple donation widget for give lively with improved accessibility and performance.",
+	"description": "UNOFFICIAL simple donation widget for give lively with improved accessibility and performance. Targets baseline widely available.",
 	"version": "0.1",
 	"type": "module",
 	"browserslist": [
-		"extends browserslist-config-baseline/2024"
+		"extends browserslist-config-baseline"
 	],
 	"scripts": {
 		"build": "./build.sh"
