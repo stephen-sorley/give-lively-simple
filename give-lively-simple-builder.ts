@@ -411,7 +411,7 @@ export const createHTML = (opt: CreateHTMLOptions): string => {
     ${attr("data-locale", iopt.locale)}
     ${attr("data-currency", iopt.currencyCode)}
     ${attr("aria-label", iopt.ariaLabel)}
-  />
+  >
     <fieldset class="gl-focus-container gl-frequency">
       <legend class="sr-only">Donation Frequency</legend>
       ${makeFrequencyRadios()}
