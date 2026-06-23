@@ -4,7 +4,7 @@
 	"version": "0.1",
 	"type": "module",
 	"browserslist": [
-		"extends browserslist-config-baseline"
+		"extends browserslist-config-baseline/2024"
 	],
 	"scripts": {
 		"build": "./build.sh"

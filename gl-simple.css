@@ -160,7 +160,7 @@
       font-weight: 400;
       margin-block-start: var(--gl-spacing-2xs);
 
-      transition: 120ms box-shadow border-color ease-in-out;
+      transition: var(--gl-duration) box-shadow border-color ease-in-out;
       &:hover, &:focus-visible {
         --gl-focus-border: color-mix(in oklch, var(--gl-color-accent), var(--gl-color-bg) 40%);
         box-shadow: 0 0 0 1px var(--gl-focus-border);
@@ -597,16 +597,5 @@
   95%,100% {
     stroke-dasharray: 42 150;
     stroke-dashoffset: -59;
-  }
-}
-
-/* Fix for lightningcss's polyfill of light-dark() - it requires color-scheme
- * to be explicitly set, unlike the real light-dark() function.
- *
- * You can remove this once light-dark hits baseline widely available (Nov 2026).
- */
-@layer theme {
-  :where(:root) {
-    color-scheme: light dark;
   }
 }
