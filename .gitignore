@@ -1,5 +1,6 @@
 test.*
 dist/test.*
+demo/*.min.*
 
 # Logs
 logs

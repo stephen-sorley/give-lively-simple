@@ -1,0 +1,5 @@
+name = "gl-simple-demo"
+compatibility_date = "2026-06-22"
+
+[assets]
+directory = "./demo"
