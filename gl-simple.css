@@ -30,9 +30,11 @@
     --gl-spacing-md: 1.5em;
     --gl-duration: 120ms;
     --gl-duration-long: calc(2.5 * var(--gl-duration));
-    --gl-section-shadow: 0 4px 6px -1px rgba(0 0 0 0.1), 0 2px 4px -2px rgba(0 0 0 0.1);
-
-    --gl-button-shadow: 0px 4px 4px -2px color-mix(in oklch, var(--gl-color-accent), transparent 80%);
+    --gl-color-shadow: color-mix(in oklch, var(--gl-color-accent), rgba(0,0,0,0.05) 85%);
+    --gl-section-shadow:
+      0 4px 6px -1px var(--gl-color-shadow),
+      0 2px 4px -2px var(--gl-color-shadow);
+    --gl-button-shadow: 0 4px 4px -2px var(--gl-color-shadow);
     --gl-color-checked: color-mix(in oklch, var(--gl-color-accent), transparent 95%);
 
     font-family: Avenir, Montserrat, Corbel, 'URW Gothic', source-sans-pro, sans-serif; /* Geometric Humanist - modernfontstacks.com */
