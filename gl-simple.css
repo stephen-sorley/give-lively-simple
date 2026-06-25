@@ -319,12 +319,16 @@
         border: 1px solid var(--gl-color-accent);
         border-radius: var(--gl-radius);
 
-        transition: var(--gl-duration) box-shadow background-color text-shadow ease-in-out;
+        transition-property: box-shadow background-color text-shadow transform;
+        transition-duration: var(--gl-duration);
+        transition-timing-function: ease-in-out;
         box-shadow: var(--gl-button-shadow);
         background-color: var(--gl-color-bg);
+        transform: translateZ(0);
         &:has(:checked) {
           box-shadow: 0 0 0 2px var(--gl-color-accent);
           text-shadow: 0.1px 0 currentColor, -0.1px 0 currentColor; /* simulate a slight bold, without changing letter spacing or position*/
+          transform: translateZ(0); /* force hardware accel to keep text antialiasing when applying text-shadow */
         }
         &:hover, &:has(:checked) {
           background-color: var(--gl-color-checked);
