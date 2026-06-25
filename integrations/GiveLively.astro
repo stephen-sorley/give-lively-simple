@@ -1,0 +1,38 @@
+---
+/**
+ * Astro adapter for code from the Give Lively Simple project:
+ * https://github.com/stephen-sorley/give-lively-simple
+ * 
+ * To use this adapter, copy the following files from Give Lively Simple into
+ * your project, putting them all in the same directory.
+ *   GiveLively.astro (this file)
+ *   gl-simple-builder.ts
+ *   gl-simple-runtime.ts
+ *   gl-simple.css
+ * 
+ * See gl-simple-builder.ts for a description of the options that you can pass
+ * into this component.
+ * 
+ * NOTE: do not include this component more than once on the same page, or it
+ *       will fail with non-unique ID's.
+ */
+
+import { createHTML, type CreateHTMLOptions } from "./gl-simple-builder";
+
+import "./gl-simple.css";
+
+// If Astro's CSP support is enabled, add the required CSP directives for Give Lively,
+// but only on pages where the donation widget is actually present.
+Astro.csp?.insertDirective("frame-src https://secure.givelively.org");
+
+// Have this component accept the same options as createHTML from gl-simple-builder,
+// and pass those options along without modification.
+export interface Props extends CreateHTMLOptions {};
+
+const donationWidgetHTML = createHTML(Astro.props);
+
+---
+
+<Fragment set:html={donationWidgetHTML} />
+
+<script src="./gl-simple-runtime.ts" /></script>
