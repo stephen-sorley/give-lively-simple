@@ -87,8 +87,8 @@
   const firstOnetime = qs(amountSet, ".gl-amt-value-onetime input") as HTMLInputElement | null;
   const firstRecurring = qs(amountSet, ".gl-amt-value-recurring input") as HTMLInputElement | null;
 
-  const donateSuffix = qs(donateForm, ".gl-donate-button span[aria-hidden]");
-  const donateSuffixAlt = qs(donateForm, ".gl-donate-button span.sr-only");
+  const donateSuffix = qs(donateForm, ".gl-donate-suffix");
+  const donateSuffixAlt = qs(donateForm, ".gl-donate-suffix-alt");
   
   const dedButton = qs(donateForm, ".gl-ded-button");
 

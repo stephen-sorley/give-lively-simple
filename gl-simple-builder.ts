@@ -162,7 +162,7 @@ const makeFrequencyRadios = (): string => {
 
   return frequencyButtons.map((freq, idx) => `
       <label ${attr("for", freq.id)} ${attr("class", freq.className)}>
-        <input type="radio" ${attr("id", freq.id)} name="frequency" ${attr("value", freq.value)} ${attr("checked", idx===0)} required/>
+        <input type="radio" ${attr("id", freq.id)} name="frequency" ${attr("value", freq.value)} ${attr("checked", idx===0)}/>
         ${freq.title}
       </label>`
   ).join("\n");
@@ -200,14 +200,14 @@ const makeAmountRadios = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string
 
   return amountButtons.map((amt) => `
         <label ${attr("for", amt.id)} ${attr("class", amt.className)}>
-          <input type="radio" ${attr("id", amt.id)} name="amount" ${attr("value", amt.value)} required/>
+          <input type="radio" ${attr("id", amt.id)} name="amount" ${attr("value", amt.value)}/>
           <span aria-hidden="true">${amt.title}</span>
           <span class="sr-only">${amt.alt}</span>
         </label>`
   ).join("\n") + `
 
         <label for="gl-amt-other">
-          <input type="radio" id="gl-amt-other" name="amount" value="other" required/>
+          <input type="radio" id="gl-amt-other" name="amount" value="other"/>
           Custom Amount
         </label>`
   ;
@@ -236,13 +236,13 @@ const makeAmountField = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string 
   // Add the input box that lets users enter a custom donation amount.
   ret.push(`
       <label for="gl-other-input" class="gl-other-entry">
-        <span class="gl-other-label-1 sr-only">Custom amount in ${curr.namePlural}:</span>
+        <span class="gl-other-label-1 sr-only">Custom amount in ${curr.namePlural}</span>
         <div class="gl-other-label-2">
-          <span>Donation amount<span class="sr-only"> in ${curr.namePlural}</span>:
+          <span>Donation amount<span class="sr-only"> in ${curr.namePlural}</span>
         </div>
         <div class="gl-focus-container">
           <span aria-hidden="true">${curr.symbol}</span>
-          <input type="text" id="gl-other-input" inputmode="numeric" name="otherAmount" ${attr("required", !hasButtons)} ${attr("value", defaultValue)} />
+          <input type="text" id="gl-other-input" inputmode="numeric" name="otherAmount" required ${attr("value", defaultValue)} />
           <span aria-hidden="true">${iopt.currencyCode}</span>
         </div>
       </label>`
@@ -280,9 +280,9 @@ const makeDonateButton = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string
   }
 
   return `
-    <button type="submit" class="gl-donate-button gl-primary">
-      <span>Donate <span aria-hidden="true">${defaultSuffix}</span></span>
-      <span class="sr-only">${defaultSuffixAlt}</span>
+    <button type="submit" class="gl-primary">
+      <span aria-hidden="true">Donate <span class="gl-donate-suffix">${defaultSuffix}</span></span>
+      <span class="sr-only">Donate <span class="gl-donate-suffix-alt">${defaultSuffixAlt}</span></span>
     </button>`
   ;
 };
@@ -311,7 +311,7 @@ const makeDedicationTypeRadios = (): string => {
 
   return dedicationButtons.map((ded, idx) => `
         <label ${attr("for",ded.id)}>
-          <input type="radio" ${attr("id", ded.id)} name="ded_type" ${attr("value",ded.value)} required ${attr("checked", idx === 0)}/>
+          <input type="radio" ${attr("id", ded.id)} name="ded_type" ${attr("value",ded.value)} ${attr("checked", idx === 0)}/>
           ${ded.title}
         </label>`
   ).join("\n");
@@ -355,7 +355,7 @@ const makeDedicationModal = (iopt: CreateHTMLOptions): string => {
    */
 
   return `
-  <dialog id="gl-ded-modal" class="gl-ded-modal" closedby="any">
+  <dialog id="gl-ded-modal" class="gl-ded-modal" closedby="any" aria-label="Edit Gift Dedication">
     <div tabindex="-1" autofocus class="sr-only" hidden></div>
 
     <button type="button" class="gl-close" commandfor="gl-ded-modal" command="request-close">
@@ -405,9 +405,9 @@ const makeDedicationModal = (iopt: CreateHTMLOptions): string => {
         </div>
       </div>
 
-      <button type="button" class="gl-ded-remove gl-secondary">Remove</button>
+      <button type="button" class="gl-ded-remove gl-secondary">Remove<span class="sr-only"> Dedication and Close</span></button>
 
-      <button type="submit" class="gl-ded-save gl-primary">Save</button>
+      <button type="submit" class="gl-ded-save gl-primary">Save<span class="sr-only"> Dedication and Close</span></button>
     </form>
   </dialog>`
   ;
@@ -415,7 +415,7 @@ const makeDedicationModal = (iopt: CreateHTMLOptions): string => {
 
 const makeDonateModal = (): string => {
   return `
-  <dialog class="gl-donate-modal" closedby="any">
+  <dialog class="gl-donate-modal" closedby="any" aria-label="Donate using Give Lively">
     <svg stroke="currentColor" viewBox="0 0 24 24" class="gl-spinner">
       <g><circle cx="12" cy="12" r="9.5" fill="none" stroke-width="2"/></g>
     </svg>
