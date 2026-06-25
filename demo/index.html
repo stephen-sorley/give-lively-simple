@@ -11,6 +11,9 @@
   <link rel="stylesheet" href="./demo.css" />
   <script type="module" src="./demo.ts" defer></script>
 
+  <link rel="stylesheet" href="./libs/coloris.css" />
+  <script type="module" src="./libs/coloris.js"></script>
+
   <link rel="stylesheet" href="./gl-simple.min.css" vite-ignore />
   <script type="module" src="./gl-simple-runtime.min.js" defer vite-ignore></script>
 </head>
@@ -52,6 +55,56 @@
           <input type="checkbox" id="do-dedication" name="dedication" checked />
           Allow dedications
         </label>
+
+        <label for="custom-colors" class="custom-colors">
+          <input type="checkbox" id="custom-colors" name="custom-colors" />
+          Customize colors
+        </label>
+
+        <fieldset class="colors">
+          <legend>Specify Colors</legend>
+
+          <div class="desc">
+            If you want a color to be the same in light and dark modes, leave the dark field blank.
+          </div>
+
+          <fieldset class="color-pair">
+            <legend>Foreground</legend>
+            <label for="color-fg-light">
+              Light
+              <input type="text" id="color-fg-light" name="color-fg-light" data-coloris value="#4A4A4A" />
+            </label>
+            <label for="color-fg-dark">
+              Dark
+              <input type="text" id="color-fg-dark" name="color-fg-dark" data-coloris value="#E2E8F0" />
+            </label>
+          </fieldset>
+
+          <fieldset class="color-pair">
+            <legend>Background</legend>
+            <label for="color-bg-light">
+              Light
+              <input type="text" id="color-bg-light" name="color-bg-light" data-coloris value="#FFFFFF" />
+            </label>
+            <label for="color-bg-dark">
+              Dark
+              <input type="text" id="color-bg-dark" name="color-bg-dark" data-coloris value="#164046" />
+            </label>
+          </fieldset>
+
+          <fieldset class="color-pair">
+            <legend>Accent</legend>
+            <label for="color-accent-light">
+              Light
+              <input type="text" id="color-accent-light" name="color-accent-light" data-coloris value="#0CA1B3" />
+            </label>
+            <label for="color-accent-dark">
+              Dark
+              <input type="text" id="color-accent-dark" name="color-accent-dark" data-coloris value="#00CBBC" />
+            </label>
+          </fieldset>
+
+        </fieldset>
 
         <button type="submit">
           Generate Widget

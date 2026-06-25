@@ -160,7 +160,7 @@ body {
 }
 
 /* Widget Configuration form, and Dark Mode selector inside Widget Viewer. */
-form.config, fieldset.darkmode, section.code {
+form.config, fieldset.darkmode, fieldset.colors, fieldset.colors fieldset, section.code {
   &:not(section.code) {
     padding: 1em;
     border: 1px solid var(--color-border-muted);
@@ -171,7 +171,7 @@ form.config, fieldset.darkmode, section.code {
     outline-offset: 0.25rem;
   }
 
-  button, input {
+  button:not(.clr-field *), input {
     font: inherit;
     font-feature-settings: inherit;
     font-variation-settings: inherit;
@@ -181,7 +181,7 @@ form.config, fieldset.darkmode, section.code {
     background-color: transparent;
     opacity: 1;
   }
-  button {
+  button:not(.clr-field *) {
     font-size: 1.2em;
     font-weight: 500;
     margin-block-start: 2.5em;
@@ -201,12 +201,20 @@ form.config, fieldset.darkmode, section.code {
       background-color: color-mix(in oklch, var(--color-fg), var(--color-bg) 10%);
     }
   }
+  .clr-field {
+    width: 100%;
+  }
   input[type="text"] {
     display: block;
     width: 100%;
     padding: 0.35em 1em;
     margin-block-start: 0.25em;
     border: 2px solid var(--color-border);
+    font-weight: 400;
+    &:is(.clr-field *) {
+      margin-block-start: 0;
+      border-width: 1px;
+    }
     transition: 120ms box-shadow ease, 120ms border-color ease;
     &:hover, &:focus-visible {
       --focus-border: color-mix(in oklch, var(--color-border), var(--color-bg) 30%);
@@ -219,13 +227,15 @@ form.config, fieldset.darkmode, section.code {
     display: block;
     cursor: pointer;
     user-select: none;
-    font-size: 1.06em;
     font-weight: 500;
 
-    & + label {
-      padding-block-start: 1.5em;
-      &:has(input[type="radio"]) {
-        padding-block-start: 0.5em;
+    &:not(fieldset.colors *) {
+      font-size: 1.06em;
+      & + label {
+        padding-block-start: 1.5em;
+        &:has(input[type="radio"]) {
+          padding-block-start: 0.5em;
+        }
       }
     }
 
@@ -236,24 +246,46 @@ form.config, fieldset.darkmode, section.code {
         border-color: var(--border-color-muted);
       }
     }
+  }
+  .desc, .err {
+    margin-block: 0.25em;
+    margin-inline: 0.25em;
+    width: 100%;
+  }
 
-    .desc, .err {
-      margin-block: 0.25em;
-      margin-inline: 0.25em;
-      width: 100%;
-    }
+  .desc {
+    font-weight: 300;
+    color: color-mix(in oklch, currentColor, transparent 10%);
+    font-size: 0.75em;
+  }
 
-    .desc {
-      font-weight: 300;
-      color: color-mix(in oklch, currentColor, transparent 10%);
-      font-size: 0.75em;
-    }
+  .err {
+    color: light-dark(#9f0712, #ff6467);
+    font-size: 0.9em;
+  }
+}
 
-    .err {
-      color: light-dark(#9f0712, #ff6467);
-      font-size: 0.9em;
+/* Hide custom color fields when the custom colors input is not checked. */
+fieldset.colors {
+  font-size: 0.95em;
+  margin-block-start: 2em;
+}
+fieldset.color-pair {
+  margin-block-start: 1em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8em 2em;
+  label {
+    flex-grow: 1;
+    font-size: 0.9em;
+    font-weight: 400 !important;
+    input {
+      color: var(--color-fg) !important;
     }
   }
+}
+form.config:not(:has(input#custom-colors:checked)) fieldset.colors {
+  display: none;
 }
 
 /* Generated HTML */

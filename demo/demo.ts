@@ -1,14 +1,14 @@
 import { createHTML, type CreateHTMLOptions } from "../gl-simple-builder.ts";
 
+const abspath = (relpath: string) : string => {
+  return new URL(relpath, window.location.origin).href;
+}
+
 const qs = (query: string) => document.querySelector(query);
 
 const container = qs(".widget-container");
 const code = qs("code");
 const form = qs("form.config") as HTMLFormElement | null;
-
-const abspath = (relpath: string) : string => {
-  return new URL(relpath, window.location.origin).href;
-}
 
 const headHTML = `\
 <link rel="stylesheet" href="${abspath("gl-simple.min.css")}" />
@@ -89,8 +89,24 @@ form?.addEventListener("submit", async (e) => {
     return;
   }
 
+  // Handle custom colors, if enabled.
+  let styleTag = "";
+  if (!!formData.get("custom-colors")) {
+    for(const colorField of ["fg","bg","accent"]) {
+      const light = (formData.get(`color-${colorField}-light`) || "#000000") as string;
+      let dark = (formData.get(`color-${colorField}-dark`) || undefined) as string | undefined;
+      if (light === dark) {
+        dark = undefined;
+      }
+      const color = dark? `light-dark(${light}, ${dark})` : light;
+      styleTag += `  --gl-color-${colorField}: ${color};\n`;
+    }
+
+    styleTag = `<style>\n.gl-simple-donation-widget {\n${styleTag}}\n</style>\n`;
+  }
+
   // Generate HTML and update the page.
-  bodyHTML = createHTML(opt as CreateHTMLOptions);
+  bodyHTML = styleTag + createHTML(opt as CreateHTMLOptions);
   container.innerHTML = bodyHTML;
   code.replaceChildren(bodyHTML);
 
