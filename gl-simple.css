@@ -1,10 +1,4 @@
 .gl-simple-donation-widget {
-  /* force disable animations if user asks for it. */
-  @media (prefers-reduced-motion: reduce) {
-    --gl-duration: 0ms !important;
-    --gl-duration-long: 0ms !important;
-  }
-
   /*
     Tailwind CSS layer priorities are: theme < base < components < utilities
 
@@ -583,6 +577,12 @@
         outline-offset: -0.1875rem;
       }
     }
+  }
+
+  /* force disable animations if user asks for it. */
+  @media (prefers-reduced-motion: reduce) {
+    --gl-duration: 0ms !important;
+    --gl-duration-long: 0ms !important;
   }
 }
 
