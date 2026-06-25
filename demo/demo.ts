@@ -6,6 +6,16 @@ const container = qs(".widget-container");
 const code = qs("code");
 const form = qs("form.config") as HTMLFormElement | null;
 
+const abspath = (relpath: string) : string => {
+  return new URL(relpath, window.location.origin).href;
+}
+
+const headHTML = `\
+<link rel="stylesheet" href="${abspath("gl-simple.min.css")}" />
+<script type="module" defer src="${abspath("gl-simple-runtime.min.js")}" ></script>\
+`;
+let bodyHTML : string | undefined;
+
 const parseNumbers = (strlist?: string | null) => {
   if (!strlist) return [];
   try {
@@ -32,6 +42,18 @@ const updateError = (name: string, msg?: string | null) => {
   errDest?.replaceChildren(...(msg? [msg] : []));
   return !!msg;
 }
+
+qs(".copy-head-button")?.addEventListener("click", async e => {
+  await navigator.clipboard.writeText(headHTML);
+});
+
+qs(".copy-body-button")?.addEventListener("click", async e => {
+  await navigator.clipboard.writeText(
+    bodyHTML?.replace(/\s+/g, ' ').replace(/>\s+</g, '><').trim()
+    ||
+    ""
+  );
+});
 
 form?.addEventListener("submit", async (e) => {
   if (!form || !container || !code) {
@@ -68,9 +90,9 @@ form?.addEventListener("submit", async (e) => {
   }
 
   // Generate HTML and update the page.
-  const widgetHTML = createHTML(opt as CreateHTMLOptions);
-  container.innerHTML = widgetHTML;
-  code.replaceChildren(widgetHTML);
+  bodyHTML = createHTML(opt as CreateHTMLOptions);
+  container.innerHTML = bodyHTML;
+  code.replaceChildren(bodyHTML);
 
   // Reload the runtime script, so that it can attach to the new elements.
   const scriptURL ="./gl-simple-runtime.min.js";
