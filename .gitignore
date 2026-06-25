@@ -1,3 +1,4 @@
+.wrangler
 demo/public/*.min.*
 demo/dist
 
