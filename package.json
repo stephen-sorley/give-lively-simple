@@ -4,15 +4,21 @@
 	"version": "0.1",
 	"type": "module",
 	"browserslist": [
-		"extends browserslist-config-baseline/2024"
+		"baseline widely available"
 	],
 	"scripts": {
-		"build": "./build.sh"
+		"build": "pnpm build:lib && pnpm build:demo",
+		"build:lib": "vite build && cp dist/gl-simple-runtime.* dist/gl-simple.* demo/public/",
+		"dev:demo": "vite --config vite.config.demo.ts",
+		"build:demo": "vite build --config vite.config.demo.ts",
+		"deploy:demo": "wrangler deploy"
 	},
 	"devDependencies": {
-		"browserslist-config-baseline": "^0.5.0",
-		"lightningcss-cli": "^1.32.0",
-		"tsdown": "^0.22.3",
-		"typescript": "^6.0.3"
+		"@types/node": "^26.0.0",
+		"browserslist-to-esbuild": "^2.1.1",
+		"lightningcss": "^1.32.0",
+		"typescript": "^6.0.3",
+		"vite": "^8.1.0",
+		"wrangler": "^4.104.0"
 	}
 }

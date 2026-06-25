@@ -1,0 +1,81 @@
+import { createHTML, type CreateHTMLOptions } from "../gl-simple-builder.ts";
+
+const qs = (query: string) => document.querySelector(query);
+
+const container = qs(".widget-container");
+const code = qs("code");
+const form = qs("form.config") as HTMLFormElement | null;
+
+const parseNumbers = (strlist?: string | null) => {
+  if (!strlist) return [];
+  try {
+    return strlist.split(',').map(item => {
+      const num = parseInt(item.trim(), 10);
+      if (isNaN(num)) {
+        throw new Error("");
+      }
+      return num;
+    });
+  } catch(e) {
+    return undefined;
+  }
+}
+
+const updateError = (name: string, msg?: string | null) => {
+  const field = qs(`#${name}`);
+  const errDest = qs(`.${name} .err`);
+
+  if (field) {
+    field.ariaInvalid = msg? "true" : null;
+  }
+
+  errDest?.replaceChildren(...(msg? [msg] : []));
+  return !!msg;
+}
+
+form?.addEventListener("submit", async (e) => {
+  if (!form || !container || !code) {
+    return;
+  }
+  e.preventDefault();
+  const formData = new FormData(form);
+
+  // Get user selections.
+  const opt: Partial<CreateHTMLOptions> = {
+    slug: (formData.get("slug") || undefined) as (string | undefined),
+    suggestedAmounts: parseNumbers(formData?.get("amounts") as (string | null | undefined)),
+    suggestedRecurringAmounts: parseNumbers(formData?.get("amounts-recurring") as (string | null | undefined)),
+    doDedication: !!formData.get("dedication"),
+    locale: "en-US",
+    currencyCode: "USD",
+  };
+
+  // Validate user selections, abort if bad.
+  let hasErr = false;
+  
+  hasErr = updateError("slug", opt.slug? "" :
+    "Enter a donation page slug (my-nonprofit-inc)"
+  ) || hasErr;
+  hasErr = updateError("amounts", opt.suggestedAmounts? "" :
+    "Enter no suggested amounts, or a list separated by commas (25, 50, 100)"
+  ) || hasErr;
+  hasErr = updateError("amounts-recurring", opt.suggestedRecurringAmounts? "" :
+    "Enter no suggested recurring amounts, or a list separated by commas (25, 50, 100)"
+  ) || hasErr;
+
+  if (hasErr) {
+    return;
+  }
+
+  // Generate HTML and update the page.
+  const widgetHTML = createHTML(opt as CreateHTMLOptions);
+  container.innerHTML = widgetHTML;
+  code.replaceChildren(widgetHTML);
+
+  // Reload the runtime script, so that it can attach to the new elements.
+  const scriptURL ="./gl-simple-runtime.min.js";
+  qs(`script[src^="${scriptURL}"]`)?.remove();
+  const script = document.createElement("script");
+  script.src = scriptURL;
+  document.body.appendChild(script);
+});

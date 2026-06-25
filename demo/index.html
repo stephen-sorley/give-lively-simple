@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" style="color-scheme: light dark">
+
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,265 +8,13 @@
 
   <title>Donation Widget Demo Page</title>
 
-  <link rel="stylesheet" href="./gl-simple.min.css" />
+  <link rel="stylesheet" href="./demo.css" />
+  <script type="module" src="./demo.ts" defer></script>
 
-  <style>
-    @layer theme {
-      *, ::after, ::before, ::backdrop {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        border: 0 solid;
-      }
-      html {
-        /* Neo-Grotesque: modernfontstacks.com */
-        font-family: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
-        font-size: 1rem;
-        line-height: 1.5;
-        -webkit-text-size-adjust: 100%;
-        tab-size: 4;
-        font-feature-settings: normal;
-        font-variation-settings: normal;
-        -webkit-tap-highlight-color: transparent;
-      }
-    }
-    body {
-      min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      overflow-x: clip;
-
-      --color-fg: light-dark(oklch(0.3 0.0478833 259.151), oklch(0.928 0.006 264.531));
-      --color-bg: light-dark(oklch(0.967 0.003 264.542), oklch(0.15 0.0478833 259.151));
-      --color-border: light-dark(oklch(0.15 0.0478833 259.151), oklch(0.967 0.003 264.542));
-
-      --color-border-muted: color-mix(in oklch, var(--color-border), var(--color-bg) 50%);
-
-      --color-banner-fg: light-dark(
-        var(--color-bg),
-        var(--color-fg)
-      );
-      --color-banner-bg: light-dark(
-        color-mix(in oklch, var(--color-fg), var(--color-bg) 15%),
-        color-mix(in oklch, var(--color-bg), var(--color-fg) 15%)
-      );
-
-      color: var(--color-fg);
-      background-color: var(--color-bg);
-
-      & > header, & > footer {
-        display: flex;
-        justify-content: center;
-        color: var(--color-banner-fg);
-        background-color: var(--color-banner-bg);
-        padding-inline: 0.5rem;
-        > * {
-          flex-grow: 1;
-          width: 100%;
-          max-width: 75rem; /*1200px*/
-        }
-        a {
-          color: inherit;
-          text-underline-offset: 0.25em;
-          transition: 120ms text-underline-offset ease-out, 120ms color ease-out;
-          &:hover, &:focus-visible {
-            color: color-mix(in oklch, currentColor, transparent 20%);
-            text-underline-offset: 0.125em;
-          }
-        }
-      }
-      & > header {
-        padding-block: 2rem;
-        margin-block-end: 2rem;
-        border-block-end: 2px solid var(--color-border-muted);
-        h1 {
-          width: 100%;
-          font-size: 2.5em;
-          font-weight: 600;
-          margin-block-end: 0.25em;
-        }
-        a {
-          width: 100%;
-          display: block;
-          font-size: 1.5em;
-          font-weight: 500;
-        }
-      }
-      & > footer {
-        margin-block-start: 3rem;
-        padding-block: 1rem;
-        font-size: 1.2em;
-        flex-shrink: 0;
-        display: flex;
-        gap: 4ch;
-        justify-content: center;
-        align-items: center;
-        border-block-start: 2px solid var(--color-border-muted);
-      }
-
-      & > main {
-        max-width: 75rem; /*1200px*/
-        flex: 1 0 auto;
-        margin-inline: auto;
-        padding-inline: 0.5rem;
-
-        display: grid;
-        row-gap: 4rem;
-        column-gap: 8rem;
-        grid-template-columns: 1fr;
-        @media (min-width: 40rem) { /*640px*/
-          grid-template-columns: repeat(2, 1fr);
-        }
-        justify-items: center;
-        align-items: start;
-
-        & > section {
-          max-width: calc(50ch + 4rem);
-          width: 100%;
-
-          &:is(.code) {
-            grid-column: 1 / -1;
-            max-width: none;
-          }
-
-          & > h2 {
-            width: 100%;
-            font-size: 1.5em;
-            font-weight: 500;
-            margin-block-end: 1rem;
-          }
-        }
-      }
-    }
-    pre {
-      color: var(--color-fg);
-      background-color: color-mix(in oklch, var(--color-bg), var(--color-fg) 2%);
-      font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace; /* Monospace Code: modernfontstacks.com */
-      border: 1px solid var(--color-border);
-      border-radius: 4px;
-      padding: 1rem;
-      overflow-x: auto;
-      overflow-y: auto;
-      max-height: 50svh;
-      margin-block-start: 1rem;
-    }
-    .widget-container {
-      html:has(#darkmode-system:checked) & {
-        color-scheme: light dark !important;
-      }
-      html:has(#darkmode-light:checked) & {
-        color-scheme: light !important;
-      }
-      html:has(#darkmode-dark:checked) & {
-        color-scheme: dark !important;
-      }
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      color: var(--color-fg);
-      background-color: light-dark(#FFF, #000);
-      padding: 2rem;
-      margin-block-start: 1.75rem;
-      border-radius: 4px;
-      border: 1px solid var(--color-border);
-    }
-    form.config, fieldset.darkmode {
-      padding: 1em;
-      border: 1px solid var(--color-border-muted);
-
-      :focus-visible {
-        outline: 0.1875rem solid light-dark(oklch(0.5 0.139272 91.1352), oklch(0.7 0.139272 91.1352));
-        outline-offset: 0.25rem;
-      }
-
-      button, input {
-        font: inherit;
-        font-feature-settings: inherit;
-        font-variation-settings: inherit;
-        letter-spacing: inherit;
-        color: inherit;
-        border-radius: 0;
-        background-color: transparent;
-        opacity: 1;
-      }
-      button {
-        font-size: 1.2em;
-        font-weight: 500;
-        margin-block-start: 2.5em;
-        margin-inline: auto;
-        appearance: button;
-        text-align: center;
-        display: block;
-        cursor: pointer;
-        
-        padding: 0.5lh 2lh;
-        color: var(--color-bg);
-        background-color: var(--color-fg);
-        border-radius: 9999px;
-
-        transition: 120ms background-color ease;
-        &:hover, &:focus-visible {
-          background-color: color-mix(in oklch, var(--color-fg), var(--color-bg) 10%);
-        }
-      }
-      input[type="text"] {
-        display: block;
-        width: 100%;
-        padding: 0.35em 1em;
-        margin-block-start: 0.25em;
-        border: 2px solid var(--color-border);
-        transition: 120ms box-shadow ease, 120ms border-color ease;
-        &:hover, &:focus-visible {
-          --focus-border: color-mix(in oklch, var(--color-border), var(--color-bg) 30%);
-          box-shadow: 0 0 0 1px var(--focus-border);
-          border-color: var(--focus-border);
-        }
-      }
-
-      label {
-        display: block;
-        cursor: pointer;
-        user-select: none;
-        font-size: 1.06em;
-        font-weight: 500;
-
-        & + label {
-          padding-block-start: 1.5em;
-          &:has(input[type="radio"]) {
-            padding-block-start: 0.5em;
-          }
-        }
-
-        &:has(input:is([type="radio",type="checkbox"])) {
-          border: 2px solid transparent;
-          transition: 120ms border-color ease;
-          &:hover, &:focus-visible {
-            border-color: var(--border-color-muted);
-          }
-        }
-
-        .desc, .err {
-          margin-block: 0.25em;
-          margin-inline: 0.25em;
-          width: 100%;
-        }
-
-        .desc {
-          font-weight: 300;
-          color: color-mix(in oklch, currentColor, transparent 10%);
-          font-size: 0.75em;
-        }
-
-        .err {
-          color: light-dark(#9f0712, #ff6467);
-          font-size: 0.9em;
-        }
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="./gl-simple.min.css" vite-ignore />
+  <script type="module" src="./gl-simple-runtime.min.js" defer vite-ignore></script>
 </head>
+
 <body>
   <header>
     <div>
@@ -313,7 +62,7 @@
     <section class="widget">
       <h2>Widget Viewer</h2>
       <fieldset class="darkmode">
-        <legend>Viewer Dark Mode</legend>
+        <legend>Dark Mode</legend>
         <label for="darkmode-system">
           <input type="radio" id="darkmode-system" name="darkmode" checked />
           System
@@ -340,83 +89,12 @@
 
   <footer>
     <div>
-      By: Stephen Sorley
-      Connect at: <a href="https://www.linkedin.com/in/ssorley/">LinkedIn</a> or <a href="https://github.com/stephen-sorley">GitHub</a>
+      <div>
+        By: Stephen Sorley
+      </div>
+      <div>
+        <a href="https://www.linkedin.com/in/ssorley/">LinkedIn</a> &nbsp; / &nbsp; <a href="https://github.com/stephen-sorley">GitHub</a>
+      </div>
     </div>
   </footer>
-
-
-  <script type="module">
-    import { createHTML } from "./gl-simple-builder.min.js";
-
-    const qs = (query) => document.querySelector(query);
-
-    const container = qs(".widget-container");
-    const code = qs("code");
-
-    const parseNumbers = (strlist) => {
-      if (!strlist) return [];
-      try {
-        return strlist.split(',').map(item => {
-          const num = parseInt(item.trim(), 10);
-          if (isNaN(num)) {
-            throw new Error("");
-          }
-          return num;
-        });
-      } catch(e) {
-        return null;
-      }
-    }
-
-    const updateError = (name, msg) => {
-      qs(`#${name}`)?.setAttribute("aria-invalid", msg? "true" : null);
-      qs(`.${name} .err`)?.replaceChildren(...(msg? [msg] : []));
-      return !!msg;
-    }
-
-    qs("form.config").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-
-      // Get user selections.
-      const opt = {
-        slug: formData.get("slug"),
-        suggestedAmounts: parseNumbers(formData.get("amounts")),
-        suggestedAmountsRecurring: parseNumbers(formData.get("amounts-recurring")),
-        doDedication: !!formData.get("dedication"),
-        locale: "en-US",
-        currencyCode: "USD",
-      };
-      
-      // Validate user selections, abort if bad.
-      if (
-        updateError("slug", opt.slug? "" :
-          "Enter a donation page slug (my-nonprofit-inc)"
-        )
-        ||
-        updateError("amounts", opt.suggestedAmounts? "" :
-          "Enter nothing, or a list of whole numbers (25, 50, 100)"
-        )
-        ||
-        updateError("amounts-recurring", opt.suggestedAmountsRecurring? "" :
-          "Enter nothing, or a list of whole numbers (25, 50, 100)"
-        )
-      ) {
-        return;
-      }
-
-      // Generate HTML and update the page.
-      const widgetHTML = createHTML(opt);
-      container.innerHTML = widgetHTML;
-      code.replaceChildren(widgetHTML);
-
-      // Reload the runtime script, so that it can attach to the new elements.
-      const scriptURL ="./gl-simple-runtime.min.js";
-      qs(`script[src^="${scriptURL}"]`)?.remove();
-      const script = document.createElement("script");
-      script.src = scriptURL;
-      document.body.appendChild(script);
-    });
-  </script>
 </body>

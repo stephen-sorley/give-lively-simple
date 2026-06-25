@@ -1,6 +1,5 @@
-test.*
-dist/test.*
-demo/*.min.*
+demo/public/*.min.*
+demo/dist
 
 # Logs
 logs
