@@ -103,7 +103,7 @@ export interface CreateHTMLOptions {
   /**
    * Any extra classes you want to add to the donation widget container.
    */
-  className?: string,
+  class?: string,
 
   /**
    * Label to apply to the form for screen readers. Don't include the word "form",
@@ -438,7 +438,7 @@ export const createHTML = (opt: CreateHTMLOptions): string => {
   const curr = getCurrencyFormat(iopt);
 
   return `\
-<div ${attr("class","gl-simple-donation-widget" + (iopt.className? " " + iopt.className : ""))}>
+<div ${attr("class","gl-simple-donation-widget" + (iopt.class? " " + iopt.class : ""))}>
   <form novalidate
     ${attr("data-slug", iopt.slug)}
     ${attr("data-locale", iopt.locale)}
