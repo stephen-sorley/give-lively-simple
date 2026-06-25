@@ -36,3 +36,46 @@ const donationWidgetHTML = createHTML(Astro.props);
 <Fragment set:html={donationWidgetHTML} />
 
 <script src="./gl-simple-runtime.ts" /></script>
+
+<!--
+  To override the default CSS styles, uncomment the style tag below, then
+  modify it as you see fit. You may also add this style tag elsewhere on the
+  page, if you prefer.
+-->
+<!--
+<style is:global>
+.gl-simple-donation-widget {
+  /* ---------------------------- */
+  /* Common settings to override. */
+  font-family: Avenir, Montserrat, Corbel, 'URW Gothic', source-sans-pro, sans-serif; /* Geometric Humanist - modernfontstacks.com */
+  font-size: 1rem;
+
+  --gl-color-fg: light-dark(#4A4A4A, #E2E8F0);     /* foreground color */
+  --gl-color-bg: light-dark(#FFF, #164046);        /* background color */
+  --gl-color-accent: light-dark(#0CA1B3, #00CBBC); /* accent color - used for borders and shadows */
+
+  /* --------------------------------------------------------------------- */
+  /* Uncommon/advanced settings that you probably don't need to mess with. */
+  --gl-color-focus: light-dark(#F2853A, #F9C727); /* color of ring applied when keyboard is focused */
+  --gl-color-error: light-dark(#9f0712, #ff6467); /* color used for form error messages */
+
+  --gl-color-shadow: color-mix(in oklch, var(--gl-color-accent), rgba(0,0,0,0.05) 85%);
+  --gl-color-checked: color-mix(in oklch, var(--gl-color-accent), transparent 95%);
+
+  --gl-radius: 0.5rem; /* border radius, used for all borders */
+
+  --gl-spacing-2xs: 0.25em;
+  --gl-spacing-xs: 0.5em;
+  --gl-spacing-sm: 1em;
+  --gl-spacing-md: 1.5em;
+
+  --gl-duration: 120ms;
+  --gl-duration-long: calc(2.5 * var(--gl-duration)); /* used for dialog open/close transitions */
+
+  --gl-section-shadow: /* applied to whole widget, and to dialog windows */
+    0 4px 6px -1px var(--gl-color-shadow),
+    0 2px 4px -2px var(--gl-color-shadow);
+  --gl-button-shadow: 0 4px 4px -2px var(--gl-color-shadow);
+}
+</style>
+-->
