@@ -35,7 +35,7 @@ const donationWidgetHTML = createHTML(Astro.props);
 
 <Fragment set:html={donationWidgetHTML} />
 
-<script src="./gl-simple-runtime.ts" /></script>
+<script src="./gl-simple-runtime.ts" ></script>
 
 <!--
   To override the default CSS styles, uncomment the style tag below, then
@@ -47,8 +47,8 @@ const donationWidgetHTML = createHTML(Astro.props);
 .gl-simple-donation-widget {
   /* ---------------------------- */
   /* Common settings to override. */
-  font-family: Avenir, Montserrat, Corbel, 'URW Gothic', source-sans-pro, sans-serif; /* Geometric Humanist - modernfontstacks.com */
-  font-size: 1rem;
+  --gl-font-family: Avenir, Montserrat, Corbel, 'URW Gothic', source-sans-pro, sans-serif; /* Geometric Humanist - modernfontstacks.com */
+  --gl-font-size: 1rem;
 
   --gl-color-fg: light-dark(#4A4A4A, #E2E8F0);     /* foreground color */
   --gl-color-bg: light-dark(#FFF, #164046);        /* background color */
