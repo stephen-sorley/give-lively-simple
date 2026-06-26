@@ -265,7 +265,7 @@ form.config, fieldset.darkmode, fieldset.colors, fieldset.colors fieldset, secti
   }
 }
 
-/* Hide custom color fields when the custom colors input is not checked. */
+/* Custom colors */
 fieldset.colors {
   font-size: 0.95em;
   margin-block-start: 2em;
@@ -285,6 +285,7 @@ fieldset.color-pair {
   }
 }
 form.config:not(:has(input#custom-colors:checked)) fieldset.colors {
+  /* Hide this section when the custom colors checkbox is unchecked. */
   display: none;
 }
 
