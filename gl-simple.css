@@ -556,7 +556,7 @@
           }
         }
       }
-      &:is(:not(.gl-closing),[data-loaded]) .gl-spinner {
+      &:is(:not([open]),[data-loaded]) .gl-spinner {
         display: none;
       }
     }

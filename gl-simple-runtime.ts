@@ -206,6 +206,13 @@
       String(e.data)
     ).toLowerCase();
 
+    // Sometimes we may get a start signal from the iframe before the iframe is finished loading.
+    // Go ahead and hide the spinner by marking the dialog with data-loaded, so we don't display
+    // a spinner over any loading screen the frame may have loaded.
+    if (message === "gl_checkout_start") {
+      donateModal.toggleAttribute("data-loaded", true);
+    }
+
     // Reset the form if the user's donation succeeded.
     if (message.includes("gl_checkout_complete")) {
       donateForm.reset();
