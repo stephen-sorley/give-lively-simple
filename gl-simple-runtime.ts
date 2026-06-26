@@ -79,29 +79,25 @@
 
   const donateForm = qsroot("> form") as HTMLFormElement;
 
-  const customInput = qs(donateForm, ".gl-amount > label input") as HTMLInputElement | null;
-  const freqSet = qs(donateForm, "fieldset.gl-frequency");
-  const amountSet = qs(donateForm, ".gl-amount fieldset");
-  const amountErr = qs(donateForm, ".gl-amount span[aria-live]");
+  const customInput = qsroot("#gl-other-input") as HTMLInputElement | null;
+  const amountSet = qsroot(".gl-amount fieldset");
+  const amountErr = qsroot(".gl-amount-err");
 
-  const firstOnetime = qs(amountSet, ".gl-amt-value-onetime input") as HTMLInputElement | null;
-  const firstRecurring = qs(amountSet, ".gl-amt-value-recurring input") as HTMLInputElement | null;
+  const firstOnetime = qsroot(".gl-amt-value-onetime input") as HTMLInputElement | null;
+  const firstRecurring = qsroot(".gl-amt-value-recurring input") as HTMLInputElement | null;
 
-  const donateSuffix = qs(donateForm, ".gl-donate-suffix");
-  const donateSuffixAlt = qs(donateForm, ".gl-donate-suffix-alt");
-  
-  const dedButton = qs(donateForm, ".gl-ded-button");
+  const dedButton = qsroot(".gl-ded-button");
 
   const iframe = qs(donateModal, "iframe") as HTMLIFrameElement | null;
 
   const dedForm = qs(dedModal, "form") as HTMLFormElement | null;
 
-  const dedNameInput = qs(dedForm, ".gl-ded-name input");
-  const dedNameErr = qs(dedForm, ".gl-ded-name span[aria-live]");
-  const dedEmailInput = qs(dedForm, ".gl-ded-email input");
-  const dedEmailErr = qs(dedForm, ".gl-ded-email span[aria-live]");
+  const dedNameInput = qsroot("#gl-ded-name");
+  const dedNameErr = qsroot(".gl-ded-email-err");
+  const dedEmailInput = qsroot("#gl-ded-email");
+  const dedEmailErr = qsroot(".gl-ded-email-err");
 
-  if (!customInput || !amountErr || !donateSuffix || !donateSuffixAlt || !donateModal || !iframe) {
+  if (!customInput || !amountErr || !donateModal || !iframe) {
     return;
   }
 
@@ -141,11 +137,11 @@
 
     const freq = (formData.get("frequency") === "monthly")? " Monthly" : "";
 
-    donateSuffix.replaceChildren(...(
+    qsroot(".gl-donate-suffix")?.replaceChildren(...(
       amountStr? [currencyFormatter.format(amountStr as unknown as number) + freq] : []
     ));
 
-    donateSuffixAlt.replaceChildren(...(
+    qsroot(".gl-donate-suffix-alt")?.replaceChildren(...(
       amountStr? [currencyNameFormatter.format(amountStr as unknown as number) + freq] : []
     ));
   };
@@ -165,7 +161,7 @@
   // When the frequency button selection is changed, and there are separate button sets for onetime vs
   // recurring, choose the first element in the new set that just got revealed:
   if (firstOnetime && firstRecurring) {
-    freqSet?.addEventListener("change", (e) => {
+    qsroot(".gl-frequency")?.addEventListener("change", (e) => {
       const btn = (e.target as HTMLInputElement).value === "one-time"? firstOnetime : firstRecurring;
       btn.checked = true;
       btn.dispatchEvent(new Event('change', {bubbles: true}));
@@ -255,7 +251,7 @@
   // When dedication form is submitted:
   dedForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (!dedButton || !dedNameErr || !dedEmailErr) {
+    if (!dedButton) {
       return;
     }
 
@@ -269,15 +265,16 @@
     };
 
     // Validate user selections.
-    if(
-      updateError(dedNameErr, dedNameInput, dedData.name? "" :
-        "Enter the dedicatee's name (John Smith)"
-      )
-      ||
-      updateError(dedEmailErr, dedEmailInput, !dedData.email || EMAIL_REGEX.test(dedData.email)? "" :
-        "Enter a valid email (jsmith@example.com)"
-      )
-    ) {
+    let hasErr = false;
+    
+    hasErr = updateError(dedNameErr, dedNameInput, dedData.name? "" :
+      "Enter the dedicatee's name (John Smith)"
+    ) || hasErr;
+    hasErr = updateError(dedEmailErr, dedEmailInput, !dedData.email || EMAIL_REGEX.test(dedData.email)? "" :
+      "Enter a valid email (jsmith@example.com)"
+    ) || hasErr;
+
+    if(hasErr) {
       dedButton.dataset.state = "new";
       dedData = undefined;
     } else {

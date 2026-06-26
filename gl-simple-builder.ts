@@ -235,7 +235,7 @@ const makeAmountField = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string 
 
   // Add the input box that lets users enter a custom donation amount.
   ret.push(`
-      <label for="gl-other-input" class="gl-other-entry">
+      <label for="gl-other-input" class="gl-other-input">
         <span class="gl-other-label-1 sr-only">Custom amount in ${curr.namePlural}</span>
         <div class="gl-other-label-2">
           <span>Donation amount<span class="sr-only"> in ${curr.namePlural}</span>
@@ -262,7 +262,7 @@ const makeAmountField = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string 
           </symbol>
           <use href="#gl-icon-warning"/>
         </svg>
-        <span aria-live="polite"></span>
+        <span class="gl-amount-err" aria-live="polite"></span>
       </div>`
   );
 
@@ -383,7 +383,7 @@ const makeDedicationModal = (iopt: CreateHTMLOptions): string => {
 
         <div class="gl-err">
           <svg aria-hidden="true"><use href="#gl-icon-warning"/></svg>
-          <span aria-live="polite"></span>
+          <span class="gl-ded-name-err" aria-live="polite"></span>
         </div>
       </div>
 
@@ -401,7 +401,7 @@ const makeDedicationModal = (iopt: CreateHTMLOptions): string => {
 
         <div class="gl-err">
           <svg aria-hidden="true"><use href="#gl-icon-warning"/></svg>
-          <span aria-live="polite"></span>
+          <span class="gl-ded-email-err" aria-live="polite"></span>
         </div>
       </div>
 

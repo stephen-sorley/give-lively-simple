@@ -119,6 +119,12 @@
       justify-content: center;
     }
 
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
     label {
       display: block;
       cursor: pointer;
@@ -156,7 +162,7 @@
       font-weight: 400;
       margin-block-start: var(--gl-spacing-2xs);
 
-      transition: var(--gl-duration) box-shadow border-color ease-in-out;
+      transition: var(--gl-duration) box-shadow border-color ease-out;
       &:hover, &:focus-visible {
         --gl-focus-border: color-mix(in oklch, var(--gl-color-accent), var(--gl-color-bg) 40%);
         box-shadow: 0 0 0 1px var(--gl-focus-border);
@@ -180,7 +186,7 @@
       gap: 1ch;
       cursor: pointer;
       width: 100%;
-      transition: var(--gl-duration) background-color ease-in-out;
+      transition: var(--gl-duration) background-color ease-out;
       padding-inline: var(--gl-spacing-sm);
       border-radius: 9999px; /* pill shape */
       font-size: 1.06em;
@@ -222,7 +228,7 @@
           height: 1em;
         }
 
-        transition: var(--gl-duration) color ease-in-out;
+        transition: var(--gl-duration) color ease-out;
 
         color: color-mix(in oklch, var(--gl-color-fg), var(--gl-color-bg) 25%);
         &:hover, &:focus-visible {
@@ -313,9 +319,9 @@
         border: 1px solid var(--gl-color-accent);
         border-radius: var(--gl-radius);
 
-        transition-property: box-shadow background-color text-shadow transform;
+        transition-property: background-color, text-shadow, transform;
         transition-duration: var(--gl-duration);
-        transition-timing-function: ease-in-out;
+        transition-timing-function: ease-out;
         box-shadow: var(--gl-button-shadow);
         background-color: var(--gl-color-bg);
         transform: translateZ(0);
@@ -329,7 +335,7 @@
         }
 
         /* Specific styling for the "Custom Amount" radio button. */
-        &:has([value="other"]) {
+        &:has(#gl-amt-other) {
           flex-basis: 100%; /* Force custom button onto its own line. */
 
           &:has(:checked) {
@@ -347,38 +353,38 @@
       }
     }
 
-    .gl-amount { /* Error group for amount input. */
 
-      & > label { /* Custom amount input field. */
-        width: 100%;
-        text-align: center;
-      
-        /* Border around currency spans and the input box itself. */
-        .gl-focus-container {
-          display: flex;
-          align-items: center;
-          background-color: var(--gl-color-bg);
-          gap: 0.35em;
+    /* Specific styling for the Custom Amount input field (not the radio button). */
+    label.gl-other-input {
+      width: 100%;
+      text-align: center;
+    
+      /* Border around currency spans and the input box itself. */
+      .gl-focus-container {
+        display: flex;
+        align-items: center;
+        background-color: var(--gl-color-bg);
+        gap: 0.35em;
 
-          span { /* gray out the currency prefix and suffix */
-            color: color-mix(in oklch, currentColor, transparent 20%);
-          }
-
-          input {
-            width: 100%;
-          }
+        span { /* gray out the currency prefix and suffix */
+          color: color-mix(in oklch, currentColor, transparent 20%);
         }
 
-        /* If there's no fieldset right before this label, style it as a standalone input. */
-        &:not(fieldset + label) {
-          .gl-other-label-1 { display: none; }  /* turn off "Custom Amount:" sr-only text */
-          .gl-other-label-2 { display: block; } /* turn on "Donation Amount: text */
+        input {
+          width: 100%;
         }
       }
 
-      /* Custom amount input box, if it has a fieldset right before it (part of custom amount radio button). */
-      & > fieldset + label {
-        display: none;
+      /* By default, style the field as a standalone input. */
+      :not(fieldset) + & {
+        .gl-other-label-1 { display: none; }  /* turn off "Custom Amount:" sr-only text */
+        .gl-other-label-2 { display: block; } /* turn on "Donation Amount: text */
+      }
+
+      /* If there are amount radio buttons before me, style it so that it looks like the
+         bottom half of the custom amount radio button.
+       */
+      fieldset + & {
         .gl-other-label-1 { display: inline; } /* turn on "Custom Amount:" sr-only text */
         .gl-other-label-2 { display: none; }   /* turn off "Donation Amount: text */
         padding: var(--gl-spacing-xs) var(--gl-spacing-sm);
@@ -398,9 +404,10 @@
         border-start-start-radius: 0;
         border-block-start-color: transparent;
       }
-      /* Display the custom input box when the "Custom Amount" radio is selected. */
-      & > fieldset:has(input[value="other"]:checked) + label {
-        display: block;
+
+      /* If there are amount radio buttons, show me when the custom amount button is selected. */
+      fieldset:not(:has(#gl-amt-other:checked)) + & {
+        display: none;
       }
     }
 
@@ -428,12 +435,6 @@
       }
     }
     
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
     dialog {
       --fade-duration: calc(var(--gl-duration-long));
 
@@ -479,19 +480,20 @@
       }
 
       /* Animate dialog entrance/exit, and disable scrolling of main page while dialog is open. */
-      transition:
-        transform var(--fade-duration) ease-out,
-        opacity var(--fade-duration) ease-in,
-        display var(--fade-duration) allow-discrete,
-        overlay var(--fade-duration) allow-discrete;
+      transition-properties: transform, opacity, display, overlay;
+      transition-duration: var(--gl-duration-long);
+      transition-timing-function: ease-out;
+      transition-behavior: allow-discrete;
       overscroll-behavior: contain;
 
       &::backdrop {
+        --gl-backdrop-trans:
+          background-color var(--gl-duration-long) ease-out,
+          display var(--gl-duration-long) allow-discrete,
+          overlay var(--gl-duration-long) allow-discrete;
         transition:
-          background-color var(--fade-duration) ease-in,
-          backdrop-filter var(--fade-duration) ease-in,
-          display var(--fade-duration) allow-discrete,
-          overlay var(--fade-duration) allow-discrete;
+          var(--gl-backdrop-trans),
+          backdrop-filter 0ms linear;/* remove delay - blur immediately removed at beginning of exit animation */
         overflow: hidden;
         overscroll-behavior: contain;
       }
@@ -500,7 +502,7 @@
       &:not([open]),
       &.gl-is-closing { /* workaround for Safari bug - Safari hides the dialog immediately on close and does not perform the exit transition. */
         opacity: 0;
-        transform: translate(-50%, -35%);
+        transform: translate(-47%, -50%);
         &::backdrop {
           background-color: transparent;
           backdrop-filter: blur(0);
@@ -512,14 +514,17 @@
         opacity: 1;
         transform: translate(-50%, -50%);
         &::backdrop {
-          background-color: rgba(0, 0, 0, 0.6);
-          backdrop-filter: blur(8px);
+          background-color: rgba(0, 0, 0, 0.7);
+          backdrop-filter: blur(3px);
+          transition:
+            var(--gl-backdrop-trans),
+            backdrop-filter 0ms linear var(--gl-duration-long); /* for performance, delay blur until end of entrance animation */;
         }
 
         /* Step 1: on the way in */
         @starting-style {
           opacity: 0;
-          transform: translate(-50%, -65%);
+          transform: translate(-53%, -50%);
           &::backdrop {
             background-color: transparent;
             backdrop-filter: blur(0);
@@ -547,11 +552,11 @@
           animation: gl-spinner-outer 2s linear infinite;
           circle {
             stroke-linecap: round;
-            animation: gl-spinner-inner 1.5s ease-in-out infinite;
+            animation: gl-spinner-inner 1.5s ease-out infinite;
           }
         }
       }
-      &:is(:not([open]),[data-loaded]) svg.gl-spinner {
+      &:is(:not(.gl-closing),[data-loaded]) .gl-spinner {
         display: none;
       }
     }
