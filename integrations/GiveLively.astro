@@ -72,7 +72,8 @@ const donationWidgetHTML = createHTML(Astro.props);
   --gl-duration: 120ms;
   --gl-duration-long: calc(2.5 * var(--gl-duration)); /* used for dialog open/close transitions */
 
-  --gl-section-shadow: /* applied to whole widget, and to dialog windows */
+  --gl-widget-border: 2px solid var(--gl-color-accent);
+  --gl-widget-shadow: /* applied to whole widget, and to dialog windows */
     0 4px 6px -1px var(--gl-color-shadow),
     0 2px 4px -2px var(--gl-color-shadow);
   --gl-button-shadow: 0 4px 4px -2px var(--gl-color-shadow);

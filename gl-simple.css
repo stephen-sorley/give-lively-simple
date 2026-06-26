@@ -39,7 +39,8 @@
     --gl-duration: 120ms;
     --gl-duration-long: calc(2.5 * var(--gl-duration)); /* used for dialog open/close transitions */
     
-    --gl-section-shadow: /* applied to whole widget, and to dialog windows */
+    --gl-widget-border: 2px solid var(--gl-color-accent);
+    --gl-widget-shadow: /* applied to whole widget, and to dialog windows */
       0 4px 6px -1px var(--gl-color-shadow),
       0 2px 4px -2px var(--gl-color-shadow);
     --gl-button-shadow: 0 4px 4px -2px var(--gl-color-shadow);
@@ -127,8 +128,8 @@
   background-color: var(--gl-color-bg);
 
   border-radius: var(--gl-radius);
-  border: 2px solid var(--gl-color-accent);
-  box-shadow: var(--gl-section-shadow);
+  border: var(--gl-widget-border);
+  box-shadow: var(--gl-widget-shadow);
 
   .sr-only { /* the standard visibly-hidden/sr-only class from Tailwind CSS. */
     position: absolute;
@@ -480,7 +481,7 @@
     margin: 0;
     border: 1px solid var(--gl-color-accent);
     border-radius: calc(var(--gl-radius) * 1.5);
-    box-shadow: var(--gl-section-shadow);
+    box-shadow: var(--gl-widget-shadow);
 
     &.gl-donate-modal {
       max-width: min(94svw, 500px);
