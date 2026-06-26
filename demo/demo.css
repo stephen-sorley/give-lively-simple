@@ -160,10 +160,14 @@ body {
 }
 
 /* Widget Configuration form, and Dark Mode selector inside Widget Viewer. */
-form.config, fieldset.darkmode, fieldset.colors, fieldset.colors fieldset, section.code {
+form.config, fieldset.darkmode, fieldset.init-freq, fieldset.colors, fieldset.colors fieldset, section.code {
   &:not(section.code) {
     padding: 1em;
     border: 1px solid var(--color-border-muted);
+  }
+
+  &:is(fieldset.init-freq) {
+    margin-block: 1.5em;
   }
 
   :focus-visible {

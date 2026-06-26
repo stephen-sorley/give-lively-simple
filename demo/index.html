@@ -50,6 +50,26 @@
           <div aria-live="polite" class="err"></div>
         </label>
 
+        <fieldset class="init-freq">
+          <legend>Initial Frequency</legend>
+
+          <label for="init-freq-one-time">
+            <input type="radio" id="init-freq-one-time" name="init-freq" value="one-time" checked />
+            One-Time
+          </label>
+          
+          <label for="init-freq-monthly">
+            <input type="radio" id="init-freq-monthly" name="init-freq" value="monthly" />
+            Monthly
+          </label>
+        </fieldset>
+
+        <label for="start-selected" class="start-selected">
+          <input type="checkbox" id="start-selected" name="start-selected" />
+          Start with Amount Selected
+          <div class="desc">Ignored if widget doesn't have amount buttons.</div>
+        </label>
+
         <label for="do-dedication" class="do-dedication">
           <input type="checkbox" id="do-dedication" name="dedication" checked />
           Allow dedications

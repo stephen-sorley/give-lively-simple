@@ -46,6 +46,21 @@ export interface CreateHTMLOptions {
   slug: string,
 
   /**
+   * Which donation frequency should be selected initially?
+   * 
+   * @default "one-time"
+   */
+  initialFrequency?: "one-time" | "monthly",
+
+  /**
+   * If we have at least two suggested amounts, should the first one be selected
+   * when the widget is loaded?
+   * 
+   * @default false
+   */
+  startWithAmountSelected?: boolean,
+
+  /**
    * What amounts to suggest to the donor (must be whole numbers).
    * 
    * If not provided, an empty input box will be shown for the donor to type
@@ -114,6 +129,16 @@ export interface CreateHTMLOptions {
   ariaLabel?: string,
 };
 
+const frequencyButtons = [
+  { title: "One-Time", value: "one-time", id: "gl-freq-onetime" },
+  { title: "Monthly",  value: "monthly",  id: "gl-freq-monthly", className: "gl-freq-recurring" }
+];
+
+const dedicationButtons = [
+  { title: "In Honor Of",  value: "InHonorOfDedication",  id: "gl-ded-honor" },
+  { title: "In Memory Of", value: "InMemoryOfDedication", id: "gl-ded-memory" },
+];
+
 // Utils and info for the selected currency and locale.
 type CurrencyFormat = {
   withSymbol: Intl.NumberFormat,
@@ -154,15 +179,17 @@ const attr = (name: string, value?: string | boolean | null): string => {
   return `${name}="${value}"`;
 };
 
-const makeFrequencyRadios = (): string => {
-  const frequencyButtons = [
-    { title: "One-Time", value: "one-time", id: "gl-freq-onetime" },
-    { title: "Monthly",  value: "monthly",  id: "gl-freq-monthly", className: "gl-freq-recurring" }
-  ];
+const getInitFreqIndex = (iopt: CreateHTMLOptions): number => {
+  let initIdx = frequencyButtons.findIndex(freq => freq.value === iopt.initialFrequency);
+  if (initIdx < 0) initIdx = 0;
+  return initIdx;
+}
 
+const makeFrequencyRadios = (iopt: CreateHTMLOptions): string => {
+  const initIdx = getInitFreqIndex(iopt);
   return frequencyButtons.map((freq, idx) => `
       <label ${attr("for", freq.id)} ${attr("class", freq.className)}>
-        <input type="radio" ${attr("id", freq.id)} name="frequency" ${attr("value", freq.value)} ${attr("checked", idx===0)}/>
+        <input type="radio" name="frequency" ${attr("id", freq.id)} ${attr("value", freq.value)} ${attr("checked", idx===initIdx)} />
         ${freq.title}
       </label>`
   ).join("\n");
@@ -188,6 +215,7 @@ const makeAmountRadios = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string
     id: "gl-amt-" + amount,
     className: separateRecurring? "gl-amt-value-onetime" : undefined,
   }}) || [];
+  const firstRecurringIdx = amountButtons.length;
   if (separateRecurring) {
     iopt.suggestedRecurringAmounts?.forEach(amount => amountButtons?.push({
       title: curr.withSymbol.format(amount),
@@ -198,9 +226,12 @@ const makeAmountRadios = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string
     }));
   }
 
-  return amountButtons.map((amt) => `
+  const initRecurring = frequencyButtons[getInitFreqIndex(iopt)].value !== "one-time";
+  const firstVisibleIdx = (initRecurring && separateRecurring)? firstRecurringIdx : 0;
+
+  return amountButtons.map((amt, idx) => `
         <label ${attr("for", amt.id)} ${attr("class", amt.className)}>
-          <input type="radio" ${attr("id", amt.id)} name="amount" ${attr("value", amt.value)}/>
+          <input type="radio" ${attr("id", amt.id)} name="amount" ${attr("value", amt.value)} ${attr("checked", iopt.startWithAmountSelected && idx===firstVisibleIdx)}/>
           <span aria-hidden="true">${amt.title}</span>
           <span class="sr-only">${amt.alt}</span>
         </label>`
@@ -270,13 +301,27 @@ const makeAmountField = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string 
 };
 
 const makeDonateButton = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string => {
-  // If suggested amounts is exactly one, we have a prefilled amount, and we need
-  // to prepopulate the button with the correct suffix text to match.
-  // (If we did this in the client Javascript instead, we'd have a layout shift during loading)
+  // If our amount is prefilled or preselected, we need to prepopulate the donate button with the
+  // correct suffix text to match.
+  // (If we did this in the client Javascript instead, we'd have a visible shift during loading)
   let defaultSuffix="", defaultSuffixAlt="";
-  if (iopt.suggestedAmounts?.length === 1) {
-    defaultSuffix = curr.withSymbol.format(iopt.suggestedAmounts[0]);
-    defaultSuffixAlt = curr.withName.format(iopt.suggestedAmounts[0]);
+  if (iopt.suggestedAmounts?.[0] && (iopt.suggestedAmounts.length === 1 || iopt.startWithAmountSelected)) {
+    const isRecurring = frequencyButtons[getInitFreqIndex(iopt)].value !== "one-time";
+
+    let val = iopt.suggestedAmounts[0];
+    if (iopt.suggestedAmounts.length > 1 && isRecurring && iopt.suggestedRecurringAmounts && iopt.suggestedRecurringAmounts.length > 1) {
+      val = iopt.suggestedRecurringAmounts[0];
+    }
+
+    defaultSuffix = curr.withSymbol.format(val);
+    defaultSuffixAlt = curr.withName.format(val);
+    
+    const initFreq = frequencyButtons[getInitFreqIndex(iopt)];
+    if (initFreq.value !== "one-time") {
+      const suffix = " " + initFreq.title;
+      defaultSuffix += suffix
+      defaultSuffixAlt += suffix;
+    }
   }
 
   return `
@@ -304,11 +349,6 @@ const makeDedicationButton = (iopt: CreateHTMLOptions): string => {
 };
 
 const makeDedicationTypeRadios = (): string => {
-  const dedicationButtons = [
-    { title: "In Honor Of",  value: "InHonorOfDedication",  id: "gl-ded-honor" },
-    { title: "In Memory Of", value: "InMemoryOfDedication", id: "gl-ded-memory" },
-  ];
-
   return dedicationButtons.map((ded, idx) => `
         <label ${attr("for",ded.id)}>
           <input type="radio" ${attr("id", ded.id)} name="type" ${attr("value",ded.value)} ${attr("checked", idx === 0)}/>
@@ -447,7 +487,7 @@ export const createHTML = (opt: CreateHTMLOptions): string => {
   >
     <fieldset class="gl-focus-container gl-frequency">
       <legend class="sr-only">Donation Frequency</legend>
-      ${makeFrequencyRadios()}
+      ${makeFrequencyRadios(iopt)}
     </fieldset>
 
     <div class="gl-err-group gl-amount">

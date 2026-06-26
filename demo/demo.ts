@@ -68,6 +68,8 @@ form?.addEventListener("submit", async (e) => {
     suggestedAmounts: parseNumbers(formData?.get("amounts") as (string | null | undefined)),
     suggestedRecurringAmounts: parseNumbers(formData?.get("amounts-recurring") as (string | null | undefined)),
     doDedication: !!formData.get("dedication"),
+    initialFrequency: (formData.get("init-freq") || undefined) as CreateHTMLOptions["initialFrequency"],
+    startWithAmountSelected: !!formData.get("start-selected"),
     locale: "en-US",
     currencyCode: "USD",
   };
