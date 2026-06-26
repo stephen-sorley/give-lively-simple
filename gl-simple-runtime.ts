@@ -78,10 +78,14 @@
   } // END polyfills and bugfixes for dialogs -----
 
   const donateForm = qsroot("> form") as HTMLFormElement;
+  if (!donateForm) {
+    console.error("Can't find Give Lively donation widget elements - did you add the HTML to your site?");
+    return;
+  }
 
   const customInput = qsroot("#gl-other-input") as HTMLInputElement | null;
   const amountSet = qsroot(".gl-amount fieldset");
-  const amountErr = qsroot(".gl-amount-err");
+  const amountErr = qsroot("#gl-amount-err");
 
   const firstOnetime = qsroot(".gl-amt-value-onetime input") as HTMLInputElement | null;
   const firstRecurring = qsroot(".gl-amt-value-recurring input") as HTMLInputElement | null;
@@ -93,13 +97,9 @@
   const dedForm = qs(dedModal, "form") as HTMLFormElement | null;
 
   const dedNameInput = qsroot("#gl-ded-name");
-  const dedNameErr = qsroot(".gl-ded-email-err");
+  const dedNameErr = qsroot("#gl-ded-name-err");
   const dedEmailInput = qsroot("#gl-ded-email");
-  const dedEmailErr = qsroot(".gl-ded-email-err");
-
-  if (!customInput || !amountErr || !donateModal || !iframe) {
-    return;
-  }
+  const dedEmailErr = qsroot("#gl-ded-email-err");
 
   let dedData: Record<string, any> | undefined; // submitted data from Dedication modal will be passed in this var.
 
@@ -124,7 +124,11 @@
     errDest?.replaceChildren(...(msg? [msg] : []));
     if (culprit) {
       culprit.ariaInvalid = msg? "true" : null;
-      culprit.ariaDescribedByElements = msg && errDest? [errDest] : null;
+      if (msg && errDest?.id) {
+        culprit.setAttribute("aria-describedby", errDest.id);
+      } else {
+        culprit.removeAttribute("aria-describedby");
+      }
     }
     /* Returns true if there was an error message to add, false if the message was empty (everything OK). */
     return !!msg;
@@ -148,9 +152,9 @@
 
   const getAmountDigits = (formData: FormData): [string | null | undefined, boolean] => {
     const buttonSelection = formData.get("amount") as string | null;
-    const customInput = formData.get("otherAmount") as string | null;
+    const customAmount = formData.get("otherAmount") as string | null;
     const ret: [string | null | undefined, boolean] = (!amountSet || buttonSelection === "other")?
-      [customInput, true] : [buttonSelection, false];
+      [customAmount, true] : [buttonSelection, false];
     ret[0] = ret[0]?.replace(/\D/g, "");
     return ret;
   };
@@ -177,9 +181,9 @@
   });
 
   // When the custom amount is edited:
-  customInput.addEventListener('input', () => {
+  customInput?.addEventListener('input', () => {
     // Reformat number for current locale as currency, but remove the currency symbol (since it's already included in prefix).
-    if (customInput.value) {
+    if (customInput?.value) {
       const digits = customInput.value.replace(/\D/g, "");
       customInput.value = digits?
         currencyFormatter.formatToParts(digits as unknown as number)
@@ -189,7 +193,7 @@
       ;
     }
   });
-  customInput.addEventListener('beforeinput', (e) => {
+  customInput?.addEventListener('beforeinput', (e) => {
     // Prevent user from manually entering any non-digit characters.
     if (e.data && /\D/g.test(e.data)) {
       e.preventDefault();
@@ -210,7 +214,7 @@
     // Go ahead and hide the spinner by marking the dialog with data-loaded, so we don't display
     // a spinner over any loading screen the frame may have loaded.
     if (message === "gl_checkout_start") {
-      donateModal.toggleAttribute("data-loaded", true);
+      donateModal?.toggleAttribute("data-loaded", true);
     }
 
     // Reset the form if the user's donation succeeded.
@@ -226,16 +230,16 @@
   });
 
   // When iframe is successfully loaded:
-  iframe.addEventListener('load', () => {
+  iframe?.addEventListener('load', () => {
     if (iframe.src && iframe.src !== "about:blank") {
-      donateModal.toggleAttribute("data-loaded", true);
+      donateModal?.toggleAttribute("data-loaded", true);
     }
   });
 
   // When donation modal is closed:
-  donateModal.addEventListener("close", () => {
+  donateModal?.addEventListener("close", () => {
     // Clear out the iframe.
-    iframe.setAttribute("src", "about:blank");
+    iframe?.setAttribute("src", "about:blank");
     donateModal.toggleAttribute("data-loaded", false);
   });
 
@@ -266,9 +270,9 @@
     const formData = new FormData(dedForm);
 
     dedData = {
-      type: (formData.get("ded_type") as string | null),
-      name: (formData.get("ded_name") as string | null)?.trim(),
-      email: (formData.get("ded_email") as string | null)?.trim()
+      type: (formData.get("type") as string | null),
+      name: (formData.get("name") as string | null)?.trim(),
+      email: (formData.get("email") as string | null)?.trim()
     };
 
     // Validate user selections.
@@ -336,7 +340,7 @@
 
     // Set the iframe URL. Show modal window immediately.
     iframeUrl.search = params.toString();
-    iframe.setAttribute("src", iframeUrl.toString());
-    donateModal.showModal();
+    iframe?.setAttribute("src", iframeUrl.toString());
+    donateModal?.showModal();
   });
 })();

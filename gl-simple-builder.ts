@@ -262,7 +262,7 @@ const makeAmountField = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string 
           </symbol>
           <use href="#gl-icon-warning"/>
         </svg>
-        <span class="gl-amount-err" aria-live="polite"></span>
+        <span id="gl-amount-err" aria-live="polite"></span>
       </div>`
   );
 
@@ -311,7 +311,7 @@ const makeDedicationTypeRadios = (): string => {
 
   return dedicationButtons.map((ded, idx) => `
         <label ${attr("for",ded.id)}>
-          <input type="radio" ${attr("id", ded.id)} name="ded_type" ${attr("value",ded.value)} ${attr("checked", idx === 0)}/>
+          <input type="radio" ${attr("id", ded.id)} name="type" ${attr("value",ded.value)} ${attr("checked", idx === 0)}/>
           ${ded.title}
         </label>`
   ).join("\n");
@@ -375,7 +375,7 @@ const makeDedicationModal = (iopt: CreateHTMLOptions): string => {
         <label for="gl-ded-name">
           Dedicatee's Name
           <span aria-hidden="true" class="gl-required"> (required)</span>
-          <input type="text" id="gl-ded-name" name="ded_name" required
+          <input type="text" id="gl-ded-name" name="name" required
             autocomplete="name" spellcheck="false" autocapitalize="words" autocorrect="off" maxlength="255"
             ${pmInputAttrs}
           />
@@ -383,17 +383,17 @@ const makeDedicationModal = (iopt: CreateHTMLOptions): string => {
 
         <div class="gl-err">
           <svg aria-hidden="true"><use href="#gl-icon-warning"/></svg>
-          <span class="gl-ded-name-err" aria-live="polite"></span>
+          <span id="gl-ded-name-err" aria-live="polite"></span>
         </div>
       </div>
 
       <div class="gl-err-group gl-ded-email">
         <label for="gl-ded-email">
           Recipient Email
-          <input type="email" id="gl-ded-email" name="ded_email" required autocomplete="email" maxlength="255"
+          <input type="email" id="gl-ded-email" name="email" required autocomplete="email" maxlength="255"
             ${pmInputAttrs}
           />
-          <div>
+          <div class="gl-desc">
             Notify someone about your gift. The email will identify you as the donor, but does not
             specify the amount of your gift.
           </div>
@@ -401,7 +401,7 @@ const makeDedicationModal = (iopt: CreateHTMLOptions): string => {
 
         <div class="gl-err">
           <svg aria-hidden="true"><use href="#gl-icon-warning"/></svg>
-          <span class="gl-ded-email-err" aria-live="polite"></span>
+          <span id="gl-ded-email-err" aria-live="polite"></span>
         </div>
       </div>
 

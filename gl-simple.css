@@ -44,6 +44,56 @@
       0 2px 4px -2px var(--gl-color-shadow);
     --gl-button-shadow: 0 4px 4px -2px var(--gl-color-shadow);
 
+    /* ---------------------------------------------------- */
+    /* Resets (mostly copied from Tailwind CSS's preflight) */
+    /* See: https://github.com/tailwindlabs/tailwindcss/blob/main/packages/tailwindcss/preflight.css */
+    *, ::after, ::before, ::backdrop {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      border: 0 solid;
+    }
+    html, :host {
+      line-height: 1.5;
+      -webkit-text-size-adjust: 100%;
+      tab-size: 4;
+      font-feature-settings: normal;
+      font-variation-settings: normal;
+      -webkit-tap-highlight-color: transparent;
+    }
+    :-moz-focusring {
+      outline: auto;
+    }
+    svg, iframe {
+      display: block;
+      vertical-align: middle;
+    }
+    button, input {
+      font: inherit;
+      font-feature-settings: inherit;
+      font-variation-settings: inherit;
+      letter-spacing: inherit;
+      color: inherit;
+      border-radius: 0;
+      background-color: transparent;
+      opacity: 1;
+    }
+    :-moz-ui-invalid {
+      box-shadow: none;
+    }
+    button {
+      appearance: button;
+    }
+    [hidden]:where(:not([hidden='until-found'])) {
+      display: none !important;
+    }
+    input {
+      appearance: none;
+      border: none;
+      box-shadow: none;
+      outline: none;
+    }
+
     /* focus ring - define in theme layer (lowest priority in Tailwind) so it can be overridden easily by the embedding project */
     :focus-visible:not(.gl-focus-container *), /* I have focus-visible and I'm not within a focus container, OR */
     .gl-focus-container:has(:focus-visible) {  /* I'm a focus container and a descendant has focus-visible */
@@ -62,49 +112,6 @@
   @media (prefers-reduced-motion: reduce) {
     --gl-duration: 0ms !important;
     --gl-duration-long: 0ms !important;
-  }
-
-  /* Applicable resets from tailwind's preflight. */
-  /* See: https://github.com/tailwindlabs/tailwindcss/blob/main/packages/tailwindcss/preflight.css */
-  *, ::after, ::before, ::backdrop {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    border: 0 solid;
-  }
-  html, :host {
-    line-height: 1.5;
-    -webkit-text-size-adjust: 100%;
-    tab-size: 4;
-    font-feature-settings: normal;
-    font-variation-settings: normal;
-    -webkit-tap-highlight-color: transparent;
-  }
-  :-moz-focusring {
-    outline: auto;
-  }
-  svg, iframe {
-    display: block;
-    vertical-align: middle;
-  }
-  button, input {
-    font: inherit;
-    font-feature-settings: inherit;
-    font-variation-settings: inherit;
-    letter-spacing: inherit;
-    color: inherit;
-    border-radius: 0;
-    background-color: transparent;
-    opacity: 1;
-  }
-  :-moz-ui-invalid {
-    box-shadow: none;
-  }
-  button {
-    appearance: button;
-  }
-  [hidden]:where(:not([hidden='until-found'])) {
-    display: none !important;
   }
 
   /* Main settings. */
@@ -174,13 +181,6 @@
     }
   }
 
-  input {
-    /* Reset all input styles to undecorated. */
-    appearance: none;
-    border: none;
-    box-shadow: none;
-    outline: none;
-  }
   /* Styling for non-radio input fields. */
   input:not([type="radio"]):not(.gl-focus-container *),
   .gl-focus-container:not(:has(input[type="radio"]))  {
@@ -198,15 +198,6 @@
       --gl-focus-border: color-mix(in oklch, var(--gl-color-accent), var(--gl-color-bg) 40%);
       box-shadow: 0 0 0 1px var(--gl-focus-border);
       border-color: var(--gl-focus-border);
-    }
-    
-    /* style any explanatory text after the input box */
-    & ~ div {
-      color: color-mix(in oklch, currentColor, transparent 10%);
-      font-size: 0.75em;
-      font-weight: 300;
-      margin-block-start: var(--gl-spacing-2xs);
-      margin-inline: 1ch;
     }
   }
 
@@ -441,6 +432,16 @@
     }
   }
 
+  /* Style for field descriptions. */
+  .gl-desc {
+    color: color-mix(in oklch, currentColor, transparent 10%);
+    font-size: 0.75em;
+    font-weight: 300;
+    margin-block-start: var(--gl-spacing-2xs);
+    margin-inline: 1ch;
+  }
+
+  /* Style for field errors. */
   .gl-err-group {
     display: flex;
     flex-direction: column;
@@ -466,8 +467,6 @@
   }
   
   dialog {
-    --fade-duration: calc(var(--gl-duration-long));
-
     top: 50%;
     left: 50%;
 
