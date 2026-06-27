@@ -63,8 +63,8 @@ These are the three main files:
 * [`gl-simple.css`](gl-simple.css) - styles that must be loaded alongside the generated html for the widget to work (doesn't depend on widget configuration)
 
 These files use modern features of HTML/CSS/JS, but align with the [Baseline Widely Available](https://web.dev/how-to-use-baseline)
-standard to ensure broad browser compatibility. A few features that are not yet widely-available are used as progressive enhancements
-- these are optional style or performance features that do not inhibit usability when missing.
+standard to ensure broad browser compatibility. A few features that are not yet widely-available are used as progressive enhancements - these
+are optional style or performance features that do not inhibit usability when missing.
 
 Minified versions of these files can be found in [`dist/`](dist). They have no external dependencies, and are very lightweight:
 
