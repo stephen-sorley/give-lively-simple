@@ -62,7 +62,7 @@ These files use modern features of HTML/CSS/JS, but align with the [Baseline Wid
 standard to ensure broad browser compatibility. A few features that are not yet widely-available are used as progressive enhancements
 (they're optional and do not affect usability when unsupported).
 
-Minified versions of these files can be found in [`dist/`](dist). They're very lightweight:
+Minified versions of these files can be found in [`dist/`](dist). They have no dependencies on other code, and are very lightweight:
 
 |  File   | Minified | Gzipped  |
 | ------- | -------- | -------- |
