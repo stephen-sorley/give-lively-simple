@@ -27,7 +27,7 @@ is important to improve donor conversion. However, the simple donation widget ha
    Interactions like opening a dialog are laggy as well, enough to require a loading skeleton.
 
 1. It cannot easily be styled using CSS to match the fonts and colors of the website, and it does not support dark mode.
-   (A single brand color may be provided in the Give Lively admin portal, which does help somewhat)
+   (A single brand color may be configured in the Give Lively admin portal, which does help somewhat)
 
 ## This Solution
 
@@ -43,7 +43,11 @@ is important to improve donor conversion. However, the simple donation widget ha
 
 1. No third-party web fonts are used by default, and no JS is used for element layout and styling. So even if the client-side
    javascript is loaded from a third-party source, you still won't get any flashes of unstyled content.
-   
+
+1. Various CSS variables are provided that can be easily overridden to style the widget, including font family, font size,
+   and color (foreground, background, accent, focus ring, error). See top of [`gl-simple.css`](gl-simple.css) for the full
+   list.
+
 1. Dark-mode is supported via the color-scheme CSS property, if the user specifies each color using the
    `light-dark()` function.
 
