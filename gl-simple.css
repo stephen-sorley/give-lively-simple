@@ -24,7 +24,7 @@
     --gl-color-error: light-dark(#9f0712, #ff6467); /* color used for form error messages */
 
     /* Fallback for default colors when light-dark() isn't supported.
-       TODO: get rid of this when light-dark() hits widely-available in Nov 2028
+       TODO: get rid of this when light-dark() hits widely-available in Nov 2026
      */
     @supports not (color: light-dark(#fff, #000)) {
       --gl-color-fg: #4A4A4A;
