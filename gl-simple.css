@@ -205,7 +205,9 @@
     font-weight: 400;
     margin-block-start: var(--gl-spacing-2xs);
 
-    transition: var(--gl-duration) box-shadow border-color ease-out;
+    transition:
+      var(--gl-duration) box-shadow ease-out,
+      var(--gl-duration) border-color ease-out;
     &:hover, &:focus-visible {
       --gl-focus-border: color-mix(in oklch, var(--gl-color-accent), var(--gl-color-bg) 40%);
       box-shadow: 0 0 0 1px var(--gl-focus-border);
@@ -220,11 +222,13 @@
     gap: 1ch;
     cursor: pointer;
     width: 100%;
-    transition: var(--gl-duration) background-color ease-out;
     padding-inline: var(--gl-spacing-sm);
     border-radius: 9999px; /* pill shape */
     font-size: 1.06em;
     font-weight: 500;
+    transition: 
+      var(--gl-duration) color ease-out,
+      var(--gl-duration) background-color ease-out;
 
     & + & { /* space between buttons */
       margin-block-start: var(--gl-spacing-sm);
@@ -262,9 +266,8 @@
         height: 1em;
       }
 
-      transition: var(--gl-duration) color ease-out;
-
       color: color-mix(in oklch, var(--gl-color-fg), var(--gl-color-bg) 25%);
+      background-color: transparent;
       &:hover, &:focus-visible {
         color: color-mix(in oklch, var(--gl-color-fg), var(--gl-color-bg) 10%);
         background-color: var(--gl-color-checked);
