@@ -286,12 +286,6 @@
         .gl-ded-button-edit { display: inline; }
       }
     }
-
-    &.gl-ded-close {
-      font-size: 0.9em;
-      padding: var(--gl-spacing-sm);
-      margin-left: auto;
-    }
   }
 
   /* Set spacing between any combination of fieldsets and error groups. */
