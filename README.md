@@ -51,7 +51,7 @@ is important to improve donor conversion. However, the simple donation widget ha
 > `light-dark()` will not become baseline widely available until Nov. 2026 (see [CanIUse](https://caniuse.com/wf-light-dark))
 
 
-## Structure
+## Project Structure
 
 These are the three main files:
 * [`gl-simple-builder.ts`](gl-simple-builder.ts) - provides function to generate HTML for a given donation widget configuration
@@ -60,7 +60,7 @@ These are the three main files:
 
 These files use modern features of HTML/CSS/JS, but align with the [Baseline Widely Available](https://web.dev/how-to-use-baseline)
 standard to ensure broad browser compatibility. A few features that are not yet widely-available are used as progressive enhancements
-(they're optional and do not affect usability when unsupported).
+- these are optional style or performance features that do not inhibit usability when missing.
 
 Minified versions of these files can be found in [`dist/`](dist). They have no external dependencies, and are very lightweight:
 
@@ -83,6 +83,8 @@ See [`integrations/GiveLively.astro`](integrations/GiveLively.astro) for an exam
 If you're using Astro, you can just copy this file straight into your project, along with the three
 main files described above (gl-simple-builder.ts, gl-simple-runtime.ts, and gl-simple.css), and it
 will work out of the box, will full typescript support for the config options.
+
+You can see an example of the Astro component being used [here](https://github.com/Christians-Concerned-for-the-Community/website-cccgainesville-org/blob/main/src/pages/give.astro), and you can see the produced page [here](https://staging.cccgainesville.org/give).
 
 The builder exports a single function (`createHTML()`), that takes only one argument of type `CreateHTMLOptions`.
 Thorough comments on each configuration option are provided at the top of [`gl-simple-builder.ts`](gl-simple-builder.ts).
