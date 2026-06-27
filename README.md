@@ -47,7 +47,7 @@ is important to improve donor conversion. However, the simple donation widget ha
    `light-dark()` function.
 
 > [!WARNING]
-> `light-dark()` will not become baseline widely available until Nov. 2026
+> `light-dark()` will not become baseline widely available until Nov. 2026 (see [CanIUse](https://caniuse.com/wf-light-dark))
 
 
 ## Structure
