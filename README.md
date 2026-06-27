@@ -24,7 +24,7 @@ is important to improve donor conversion. However, the simple donation widget ha
    overall.
 
 1. The widget is somewhat heavy, and cannot be embedded statically - so there's always a flash of unstyled content (FOUC) on load.
-   Interactions like opening a dialog are a bit laggy as well, due to use of DOM modification for dialogs.
+   Interactions like opening a dialog are laggy as well, enough to require a loading skeleton.
 
 1. It cannot easily be styled using CSS to match the fonts and colors of the website, and it does not support dark mode.
    (A single brand color may be provided in the Give Lively admin portal, which does help somewhat)
