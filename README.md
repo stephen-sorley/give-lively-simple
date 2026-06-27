@@ -1,5 +1,5 @@
 # give-lively-simple
-Improved simple donation widget for Give Lively (NOT official). Uses semantic HTML/CSS with minimal vanilla JS for improved performance and accessibility.
+Improved simple donation widget for Give Lively **(NOT official)**. Uses semantic HTML/CSS with minimal vanilla JS for improved performance and accessibility.
 
 ## Try it out!
 <https://gl-simple-demo.twilight-bread-fa09.workers.dev>
