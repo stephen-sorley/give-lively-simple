@@ -510,7 +510,7 @@
     }
 
     /* Animate dialog entrance/exit, and disable scrolling of main page while dialog is open. */
-    transition-properties: transform, opacity, display, overlay;
+    transition-property: transform, opacity, display, overlay;
     transition-duration: var(--gl-duration-long);
     transition-timing-function: ease-out;
     transition-behavior: allow-discrete;
