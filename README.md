@@ -34,7 +34,7 @@ is important to improve donor conversion. However, the simple donation widget ha
 1. Supports configuring separate suggested amounts for recurring donations, and the initial donation frequency.
 
 1. Prefers native html elements (`<form>`, `<dialog>`, `<button>`, etc) for improved accessibility without needing to set
-   a bunch of ARIA attributes manually. This helps with performance, too.
+   a bunch of ARIA attributes manually. This helps with performance, too (espeically dialogs).
 
 1. For performance, uses modern CSS features to minimize the amount of client-side javascript needed.
 
