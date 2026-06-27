@@ -12,7 +12,7 @@ for the source code.
 Give Lively's existing simple donation widget is a nice way to allow donors to initiate a donation directly from your website. This
 is important to improve donor conversion. However, the simple donation widget has a few drawbacks:
 
-1. Support for separate monthly donation amounts, or picking a different initial donation frequency, is not yet implemented.
+1. Separate suggested amounts for recurring donations and picking a different initial donation frequency are not yet implemented.
 
 1. It is not accessible via keyboard - if you try to select one of the amount buttons, you can't then tab past the "custom amount"
    button without clearing your selection.
@@ -20,7 +20,7 @@ is important to improve donor conversion. However, the simple donation widget ha
 1. The form is very confusing when using a screen-reader - the buttons act like radio buttons in two separate groups,
    but they are not marked as radio buttons in the accessibility tree, and the groups are not present either.
 
-1. Semantic html is not used for forms or form controls, leading to very inconsistent/inadequate accessibility behavior
+1. Native, semantic html is not used for forms or form controls, leading to very inconsistent/inadequate accessibility behavior
    overall.
 
 1. The widget is somewhat heavy, and cannot be embedded statically - so there's always a flash of unstyled content (FOUC) on load.
@@ -33,8 +33,8 @@ is important to improve donor conversion. However, the simple donation widget ha
 
 1. Supports configuring separate suggested amounts for recurring donations, and the initial donation frequency.
 
-1. Prefers semantic html elements (`<form>`, `<dialog>`, `<button>`, etc) for improved accessibility without needing to set
-   a bunch of ARIA attributes manually.
+1. Prefers native html elements (`<form>`, `<dialog>`, `<button>`, etc) for improved accessibility without needing to set
+   a bunch of ARIA attributes manually. This helps with performance, too.
 
 1. For performance, uses modern CSS features to minimize the amount of client-side javascript needed.
 
