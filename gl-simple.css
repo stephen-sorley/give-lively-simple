@@ -263,6 +263,7 @@
       }
     }
 
+    /* Dialog close button. */
     &.gl-close {
       border-radius: 0;
       width: fit-content;
@@ -282,6 +283,7 @@
       }
     }
 
+    /* Handles changing the text and icon fill for the dedication button on the main form. */
     &.gl-ded-button {
       &[data-state="new"] {
         svg { fill: transparent; }
@@ -323,10 +325,10 @@
     */
     label {
       /* If a recurring frequency is checked, and there's a separate list of 
-        * recurring amounts, hide the one-time donation amounts.
-        * Note: the class gl-amt-value-onetime is only present if we generated
-        *       the form with different suggested amounts for recurring donations.
-        */
+       * recurring amounts, hide the one-time donation amounts.
+       * Note: the class gl-amt-value-onetime is only present if we generated
+       *       the form with different suggested amounts for recurring donations.
+       */
       .gl-simple-donation-widget:has(label.gl-freq-recurring input:checked) & {
         &.gl-amt-value-onetime {
           display: none;
