@@ -11,6 +11,8 @@ it as much as you like, it runs entirely on the client side, and the static asse
 Give Lively's existing simple donation widget is a nice way to allow donors to initiate a donation directly from your website. This
 is important to improve donor conversion. However, the simple donation widget has a few drawbacks:
 
+1. Support for separate monthly donation amounts, or picking a different initial donation frequency, is not yet implemented.
+
 1. It is not accessible via keyboard - if you try to select one of the amount buttons, you can't then tab past the "custom amount"
    button without clearing your selection.
 
@@ -25,6 +27,27 @@ is important to improve donor conversion. However, the simple donation widget ha
 
 1. It cannot easily be styled using CSS to match the fonts and colors of the website, and it does not support dark mode.
    (A single brand color may be provided in the Give Lively admin portal, which does help somewhat)
+
+## This Solution
+
+1. Supports configuring separate suggested amounts for recurring donations, and the initial donation frequency.
+
+1. Prefers semantic html elements (`<form>`, `<dialog>`, `<button>`, etc) for improved accessibility without needing to set
+   a bunch of ARIA attributes manually.
+
+1. For performance, uses modern CSS features to minimize the amount of client-side javascript needed.
+
+1. Amount and frequency buttons now use actual `<input type="radio">` elements, grouped inside `<fieldset>`, to enforce
+   proper screen-reader and keyboard-interaction behavior.
+
+1. No third-party web fonts are used by default, and no JS is used for element layout and styling. So even if the client-side
+   javascript is loaded from a third-party source, you still won't get any flashes of unstyled content.
+   
+1. Dark-mode is supported via the color-scheme CSS property, if the user specifies each color using the
+   `light-dark()` function.
+
+> [!WARNING]
+> `light-dark()` will not become baseline widely available until Nov. 2026
 
 
 ## Structure
@@ -44,7 +67,7 @@ Minified versions of these files can be found in [`dist/`](dist). They're very l
 | ------- | -------- | -------- |
 | builder |  9.37 kB |  3.05 kB |
 | runtime |  5.72 kB |  2.38 kB |
-| css     | 10.00 kB |  2.75 kB |
+| css     | 10.16 kB |  2.79 kB |
 
 
 ## Integration
