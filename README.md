@@ -5,7 +5,8 @@ Improved simple donation widget for Give Lively **(NOT official)**. Uses semanti
 <https://gl-simple-demo.twilight-bread-fa09.workers.dev>
 
 This is a quick & dirty demo page I wrote that lets you configure a donation widget and generate embeddable HTML for it. Feel free to use
-it as much as you like, it runs entirely on the client side, and the static assets are hosted for free by Cloudflare.
+it as much as you like, it runs entirely on the client side, and the static assets are hosted for free by Cloudflare. See [`/demo`](/demo)
+for the source code.
 
 ## Motivation
 Give Lively's existing simple donation widget is a nice way to allow donors to initiate a donation directly from your website. This
