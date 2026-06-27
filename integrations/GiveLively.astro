@@ -53,12 +53,11 @@ const donationWidgetHTML = createHTML(Astro.props);
   --gl-color-fg: light-dark(#4A4A4A, #E2E8F0);     /* foreground color */
   --gl-color-bg: light-dark(#FFF, #164046);        /* background color */
   --gl-color-accent: light-dark(#0CA1B3, #00CBBC); /* accent color - used for borders and shadows */
-
-  /* --------------------------------------------------------------------- */
-  /* Uncommon/advanced settings that you probably don't need to mess with. */
   --gl-color-focus: light-dark(#F2853A, #F9C727); /* color of ring applied when keyboard is focused */
   --gl-color-error: light-dark(#9f0712, #ff6467); /* color used for form error messages */
 
+  /* --------------------------------------------------------------------- */
+  /* Uncommon/advanced settings that you probably don't need to mess with. */
   --gl-color-shadow: color-mix(in oklch, var(--gl-color-accent), rgba(0,0,0,0.05) 85%);
   --gl-color-checked: color-mix(in oklch, var(--gl-color-accent), transparent 95%);
 
