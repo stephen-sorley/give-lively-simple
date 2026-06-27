@@ -215,6 +215,18 @@
     }
   }
 
+  
+  /* Set spacing between any combination of fieldsets, error groups, and buttons. */
+  :where(fieldset, .gl-err-group, button) + :where(fieldset, .gl-err-group, button) {
+    margin-block-start: var(--gl-spacing-md);
+  }
+
+  /* Set smaller spacing between buttons. */
+  button + button {
+    margin-block-start: var(--gl-spacing-sm);
+  }
+
+
   button {
     display: flex;
     align-items: center;
@@ -229,10 +241,6 @@
     transition: 
       var(--gl-duration) color ease-out,
       var(--gl-duration) background-color ease-out;
-
-    & + & { /* space between buttons */
-      margin-block-start: var(--gl-spacing-sm);
-    }
 
     &.gl-primary {
       padding-block: var(--gl-spacing-sm);
@@ -286,17 +294,6 @@
         .gl-ded-button-edit { display: inline; }
       }
     }
-  }
-
-  /* Set spacing between any combination of fieldsets and error groups. */
-  :is(fieldset, .gl-err-group) + :is(fieldset, .gl-err-group) {
-    margin-block-start: var(--gl-spacing-md);
-  }
-
-  /* Set spacing between a fieldset/error group and a subsequent button (also the reverse). */
-  :is(fieldset, .gl-err-group) + button,
-  button + :is(fieldset, .gl-err-group) {
-    margin-block-start: var(--gl-spacing-md);
   }
 
   /* Fieldset: a radio button group, where each radio button just looks like a regular button */
