@@ -8,7 +8,7 @@
 	],
 	"scripts": {
 		"build": "pnpm build:lib && pnpm build:demo",
-		"build:lib": "vite build && cp dist/gl-simple-runtime.* dist/gl-simple.* demo/public/",
+		"build:lib": "vite build && mkdir -p demo/public && cp dist/gl-simple-runtime.* dist/gl-simple.* demo/public/",
 		"dev:demo": "vite --config vite.config.demo.ts",
 		"build:demo": "vite build --config vite.config.demo.ts",
 		"deploy:demo": "wrangler deploy"
