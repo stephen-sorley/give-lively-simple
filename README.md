@@ -44,7 +44,7 @@ is important to improve donor conversion. However, the simple donation widget ha
 1. No third-party web fonts are used by default, and no JS is used for element layout and styling. So even if the client-side
    javascript is loaded from a third-party source, you still won't get any flashes of unstyled content.
 
-1. Various CSS variables are provided that can be easily overridden to style the widget, including font family, font size,
+1. CSS variables are provided that can be easily overridden to style the widget, including font family, font size,
    and color (foreground, background, accent, focus ring, error). See top of [`gl-simple.css`](gl-simple.css) for the full
    list.
 
