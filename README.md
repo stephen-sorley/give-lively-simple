@@ -106,7 +106,7 @@ the donation widget to appear. This will add a single `<div>` with class `gl-sim
 that contains the entire widget.
 
 If you're using a Wordpress theme or something similar that will only allow you to inject HTML into
-the body, it's okay to past the head HTML tags right after the body HTML, it's just a bit less efficient
+the body, it's okay to paste the head HTML tags inside the body. Should still work, it's just a bit less efficient
 for loading.
 
 You can also use `<script>` and `<style>` tags to inline the necessary content instead, if you wish. You'll
