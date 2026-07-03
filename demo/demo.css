@@ -242,15 +242,8 @@ form.config, fieldset.darkmode, fieldset.init-freq, fieldset.colors, fieldset.co
         }
       }
     }
-
-    &:has(input:is([type="radio",type="checkbox"])) {
-      border: 2px solid transparent;
-      transition: 120ms border-color ease;
-      &:hover, &:focus-visible {
-        border-color: var(--border-color-muted);
-      }
-    }
   }
+  
   .desc, .err {
     margin-block: 0.25em;
     margin-inline: 0.25em;
