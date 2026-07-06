@@ -127,6 +127,16 @@ export interface CreateHTMLOptions {
    * @default "Secure Donation"
    */
   ariaLabel?: string,
+
+  /**
+   * String to add to HTML id's to make them unique.
+   * 
+   * This will allow you to include multiple copies of the donation widget on the same page,
+   * if each copy has a different suffix.
+   * 
+   * @default ""
+   */
+  suffix?: string,
 };
 
 const frequencyButtons = [
@@ -188,8 +198,8 @@ const getInitFreqIndex = (iopt: CreateHTMLOptions): number => {
 const makeFrequencyRadios = (iopt: CreateHTMLOptions): string => {
   const initIdx = getInitFreqIndex(iopt);
   return frequencyButtons.map((freq, idx) => `
-      <label ${attr("for", freq.id)} ${attr("class", freq.className)}>
-        <input type="radio" name="frequency" ${attr("id", freq.id)} ${attr("value", freq.value)} ${attr("checked", idx===initIdx)} />
+      <label ${attr("for", freq.id+iopt.suffix)} ${attr("class", freq.className)}>
+        <input type="radio" name="frequency" ${attr("id", freq.id+iopt.suffix)} ${attr("value", freq.value)} ${attr("checked", idx===initIdx)} />
         ${freq.title}
       </label>`
   ).join("\n");
@@ -212,7 +222,7 @@ const makeAmountRadios = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string
     title: curr.withSymbol.format(amount),
     alt: curr.withName.format(amount),
     value: String(Math.ceil(amount)),
-    id: "gl-amt-" + amount,
+    id: "gl-amt-" + amount + iopt.suffix,
     className: separateRecurring? "gl-amt-value-onetime" : undefined,
   }}) || [];
   const firstRecurringIdx = amountButtons.length;
@@ -221,7 +231,7 @@ const makeAmountRadios = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string
       title: curr.withSymbol.format(amount),
       alt: curr.withName.format(amount),
       value: String(Math.ceil(amount)),
-      id: "gl-amt-recurring" + amount,
+      id: "gl-amt-recurring-" + amount + iopt.suffix,
       className: "gl-amt-value-recurring",
     }));
   }
@@ -237,8 +247,8 @@ const makeAmountRadios = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string
         </label>`
   ).join("\n") + `
 
-        <label for="gl-amt-other">
-          <input type="radio" id="gl-amt-other" name="amount" value="other"/>
+        <label for="gl-amt-other${iopt.suffix}" class="gl-amt-other">
+          <input type="radio" id="gl-amt-other${iopt.suffix}" name="amount" value="other"/>
           Custom Amount
         </label>`
   ;
@@ -266,14 +276,14 @@ const makeAmountField = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string 
 
   // Add the input box that lets users enter a custom donation amount.
   ret.push(`
-      <label for="gl-other-input" class="gl-other-input">
+      <label for="gl-other-input${iopt.suffix}" class="gl-other-input">
         <span class="gl-other-label-1 sr-only">Custom amount in ${curr.namePlural}</span>
         <div class="gl-other-label-2">
           <span>Donation amount<span class="sr-only"> in ${curr.namePlural}</span>
         </div>
         <div class="gl-focus-container">
           <span aria-hidden="true">${curr.symbol}</span>
-          <input type="text" id="gl-other-input" inputmode="numeric" name="otherAmount" required ${attr("value", defaultValue)} />
+          <input type="text" id="gl-other-input${iopt.suffix}" inputmode="numeric" name="otherAmount" required ${attr("value", defaultValue)} />
           <span aria-hidden="true">${iopt.currencyCode}</span>
         </div>
       </label>`
@@ -284,16 +294,16 @@ const makeAmountField = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string 
   ret.push(`
       <div class="gl-err">
         <svg aria-hidden="true">
-          <symbol id="gl-icon-warning" viewBox="0 0 24 24">
+          <symbol id="gl-icon-warning${iopt.suffix}" viewBox="0 0 24 24">
             <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 9v4" />
               <path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0" />
               <path d="M12 16h.01" />
             </g>
           </symbol>
-          <use href="#gl-icon-warning"/>
+          <use href="#gl-icon-warning${iopt.suffix}"/>
         </svg>
-        <span id="gl-amount-err" aria-live="polite"></span>
+        <span id="gl-amount-err${iopt.suffix}" class="gl-amount-err" aria-live="polite"></span>
       </div>`
   );
 
@@ -338,7 +348,7 @@ const makeDedicationButton = (iopt: CreateHTMLOptions): string => {
   }
   // Heart icon obtained from here: https://tabler.io/icons?icon=heart
   return `
-    <button type="button" class="gl-ded-button gl-secondary" data-state="new" commandfor="gl-ded-modal" command="show-modal">
+    <button type="button" class="gl-ded-button gl-secondary" data-state="new" commandfor="gl-ded-modal${iopt.suffix}" command="show-modal">
       <svg aria-hidden="true" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path d="M6.979 3.074a6 6 0 0 1 4.988 1.425l.037 .033l.034 -.03a6 6 0 0 1 4.733 -1.44l.246 .036a6 6 0 0 1 3.364 10.008l-.18 .185l-.048 .041l-7.45 7.379a1 1 0 0 1 -1.313 .082l-.094 -.082l-7.493 -7.422a6 6 0 0 1 3.176 -10.215z" />
       </svg>
@@ -348,10 +358,10 @@ const makeDedicationButton = (iopt: CreateHTMLOptions): string => {
   ;
 };
 
-const makeDedicationTypeRadios = (): string => {
+const makeDedicationTypeRadios = (iopt: CreateHTMLOptions): string => {
   return dedicationButtons.map((ded, idx) => `
-        <label ${attr("for",ded.id)}>
-          <input type="radio" ${attr("id", ded.id)} name="type" ${attr("value",ded.value)} ${attr("checked", idx === 0)}/>
+        <label ${attr("for", ded.id+iopt.suffix)}>
+          <input type="radio" ${attr("id", ded.id+iopt.suffix)} name="type" ${attr("value",ded.value)} ${attr("checked", idx === 0)}/>
           ${ded.title}
         </label>`
   ).join("\n");
@@ -395,10 +405,10 @@ const makeDedicationModal = (iopt: CreateHTMLOptions): string => {
    */
 
   return `
-  <dialog id="gl-ded-modal" class="gl-ded-modal" closedby="any" aria-label="Edit Gift Dedication">
+  <dialog id="gl-ded-modal${iopt.suffix}" class="gl-ded-modal" closedby="any" aria-label="Dedicate Gift">
     <div tabindex="-1" autofocus class="sr-only" hidden></div>
 
-    <button type="button" class="gl-close" commandfor="gl-ded-modal" command="request-close">
+    <button type="button" class="gl-close" commandfor="gl-ded-modal${iopt.suffix}" command="request-close">
       <svg aria-hidden="true" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
         <path d="M18 6l-12 12" /><path d="M6 6l12 12" />
       </svg>
@@ -408,29 +418,29 @@ const makeDedicationModal = (iopt: CreateHTMLOptions): string => {
     <form novalidate ${attr("aria-label", ariaLabel)} ${pmFormAttrs}>
       <fieldset class="gl-focus-container">
         <legend class="sr-only">Dedication Type</legend>
-        ${makeDedicationTypeRadios()}
+        ${makeDedicationTypeRadios(iopt)}
       </fieldset>
 
       <div class="gl-err-group gl-ded-name">
-        <label for="gl-ded-name">
+        <label for="gl-ded-name${iopt.suffix}">
           Dedicatee's Name
           <span aria-hidden="true" class="gl-required"> (required)</span>
-          <input type="text" id="gl-ded-name" name="name" required
+          <input type="text" id="gl-ded-name${iopt.suffix}" name="name" required
             autocomplete="name" spellcheck="false" autocapitalize="words" autocorrect="off" maxlength="255"
             ${pmInputAttrs}
           />
         </label>
 
         <div class="gl-err">
-          <svg aria-hidden="true"><use href="#gl-icon-warning"/></svg>
-          <span id="gl-ded-name-err" aria-live="polite"></span>
+          <svg aria-hidden="true"><use href="#gl-icon-warning${iopt.suffix}"/></svg>
+          <span id="gl-ded-name-err${iopt.suffix}" class="gl-ded-name-err" aria-live="polite"></span>
         </div>
       </div>
 
       <div class="gl-err-group gl-ded-email">
-        <label for="gl-ded-email">
+        <label for="gl-ded-email${iopt.suffix}">
           Recipient Email
-          <input type="email" id="gl-ded-email" name="email" required autocomplete="email" maxlength="255"
+          <input type="email" id="gl-ded-email${iopt.suffix}" name="email" required autocomplete="email" maxlength="255"
             ${pmInputAttrs}
           />
           <div class="gl-desc">
@@ -440,8 +450,8 @@ const makeDedicationModal = (iopt: CreateHTMLOptions): string => {
         </label>
 
         <div class="gl-err">
-          <svg aria-hidden="true"><use href="#gl-icon-warning"/></svg>
-          <span id="gl-ded-email-err" aria-live="polite"></span>
+          <svg aria-hidden="true"><use href="#gl-icon-warning${iopt.suffix}"/></svg>
+          <span id="gl-ded-email-err${iopt.suffix}" class="gl-ded-email-err" aria-live="polite"></span>
         </div>
       </div>
 
@@ -473,6 +483,7 @@ export const createHTML = (opt: CreateHTMLOptions): string => {
   iopt.currencyCode ||= "USD";
   iopt.locale ||= new Intl.DateTimeFormat().resolvedOptions().locale;
   iopt.ariaLabel ||= "Secure Donation";
+  iopt.suffix ||= "";
 
   // Set up currency formatting for chosen code and locale.
   const curr = getCurrencyFormat(iopt);

@@ -365,7 +365,7 @@
       }
 
       /* Specific styling for the "Custom Amount" radio button. */
-      &:has(#gl-amt-other) {
+      &.gl-amt-other {
         flex-basis: 100%; /* Force custom button onto its own line. */
 
         &:has(:checked) {
@@ -434,8 +434,8 @@
       border-block-start-color: transparent;
     }
 
-    /* If there are amount radio buttons, show me when the custom amount button is selected. */
-    fieldset:not(:has(#gl-amt-other:checked)) + & {
+    /* If there are amount radio buttons, show myself when the custom amount button is selected. */
+    fieldset:not(:has(.gl-amt-other input:checked)) + & {
       display: none;
     }
   }
