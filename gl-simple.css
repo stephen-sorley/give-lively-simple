@@ -377,7 +377,7 @@
             2px 0 0 0 var(--gl-color-accent);
           border-end-end-radius: 0;
           border-end-start-radius: 0;
-          border-block-end-color: transparent;
+          border-block-end: none;
         }
       }
     }
@@ -431,7 +431,7 @@
       
       border-start-end-radius: 0;
       border-start-start-radius: 0;
-      border-block-start-color: transparent;
+      border-block-start: none;
     }
 
     /* If there are amount radio buttons, show myself when the custom amount button is selected. */
