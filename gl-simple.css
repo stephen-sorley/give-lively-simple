@@ -298,20 +298,11 @@
     }
   }
 
-  /* Fieldset: a radio button group, where each radio button just looks like a regular button */
-  fieldset {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: start;
-    width: 100%;
-    gap: var(--gl-spacing-xs); /* space button radio buttons, in both dimensions */
-
-    /*
-      Inputs in a fieldset are a radio button group.
-      Hide the radio buttons completely, only show the label that wraps them - the
-      user will be able to click on / keyboard focus the label instead.
-    */
+  /* Radio buttons and labels. */
+  label:has([type="radio"]) {
+    /* Hide the radio buttons completely, only show the label that wraps them - the
+     * user will be able to click on / keyboard focus the label instead.
+     */
     input {
       position: absolute;
       padding: none;
@@ -320,67 +311,72 @@
       height: 0;
     }
 
-    /*
-      Style the labels that wrap each radio button.
-    */
-    label {
-      /* If a recurring frequency is checked, and there's a separate list of 
-       * recurring amounts, hide the one-time donation amounts.
-       * Note: the class gl-amt-value-onetime is only present if we generated
-       *       the form with different suggested amounts for recurring donations.
-       */
-      .gl-simple-donation-widget:has(label.gl-freq-recurring input:checked) & {
-        &.gl-amt-value-onetime {
-          display: none;
-        }
-      }
-      /* If a recurring frequency is not checked, hide the recurring donation amounts. */
-      .gl-simple-donation-widget:not(:has(label.gl-freq-recurring input:checked)) & {
-        &.gl-amt-value-recurring {
-          display: none;
-        }
-      }
-      position: relative;
-      text-align: center;
-      flex: 1 0 fit-content; /* don't shrink to fit text, grow to fill available space along row, use width of text content as basis */
-      padding: var(--gl-spacing-xs);
-      user-select: none; /* make text unselectable by user (since it functions as a button) */
-      
-      border: 1px solid var(--gl-color-accent);
-      border-radius: var(--gl-radius);
-
-      transition-property: background-color, text-shadow, transform;
-      transition-duration: var(--gl-duration);
-      transition-timing-function: ease-out;
-      box-shadow: var(--gl-button-shadow);
-      background-color: var(--gl-color-bg);
-      transform: translateZ(0);
-      &:has(:checked) {
-        box-shadow: 0 0 0 2px var(--gl-color-accent);
-        text-shadow: 0.1px 0 currentColor, -0.1px 0 currentColor; /* simulate a slight bold, without changing letter spacing or position*/
-        transform: translateZ(0); /* force hardware accel to keep text antialiasing when applying text-shadow */
-      }
-      &:hover, &:has(:checked) {
-        background-color: var(--gl-color-checked);
-      }
-
-      /* Specific styling for the "Custom Amount" radio button. */
-      &.gl-amt-other {
-        flex-basis: 100%; /* Force custom button onto its own line. */
-
-        &:has(:checked) {
-          padding-block-end: 0;
-          /* When checked, remove bottom border so we can combine seamlessly with the amount input field. */
-          box-shadow:
-            0 -2px 0 0 var(--gl-color-accent),
-            -2px 0 0 0 var(--gl-color-accent),
-            2px 0 0 0 var(--gl-color-accent);
-          border-end-end-radius: 0;
-          border-end-start-radius: 0;
-          border-block-end: none;
-        }
+    /* If a recurring frequency is checked, and there's a separate list of 
+     * recurring amounts, hide the one-time donation amounts.
+     * Note: the class gl-amt-value-onetime is only present if we generated
+     *       the form with different suggested amounts for recurring donations.
+     */
+    .gl-simple-donation-widget:has(label.gl-freq-recurring input:checked) & {
+      &.gl-amt-value-onetime {
+        display: none;
       }
     }
+    /* If a recurring frequency is not checked, hide the recurring donation amounts. */
+    .gl-simple-donation-widget:not(:has(label.gl-freq-recurring input:checked)) & {
+      &.gl-amt-value-recurring {
+        display: none;
+      }
+    }
+    position: relative;
+    text-align: center;
+    flex: 1 0 fit-content; /* don't shrink to fit text, grow to fill available space along row, use width of text content as basis */
+    padding: var(--gl-spacing-xs);
+    user-select: none; /* make text unselectable by user (since it functions as a button) */
+    
+    border: 1px solid var(--gl-color-accent);
+    border-radius: var(--gl-radius);
+
+    transition-property: background-color, text-shadow, transform;
+    transition-duration: var(--gl-duration);
+    transition-timing-function: ease-out;
+    box-shadow: var(--gl-button-shadow);
+    background-color: var(--gl-color-bg);
+    transform: translateZ(0);
+    &:has(:checked) {
+      box-shadow: 0 0 0 2px var(--gl-color-accent);
+      text-shadow: 0.1px 0 currentColor, -0.1px 0 currentColor; /* simulate a slight bold, without changing letter spacing or position*/
+      transform: translateZ(0); /* force hardware accel to keep text antialiasing when applying text-shadow */
+    }
+    &:hover, &:has(:checked) {
+      background-color: var(--gl-color-checked);
+    }
+
+    /* Specific styling for the "Custom Amount" radio button. */
+    &.gl-amt-other {
+      flex-basis: 100%; /* Force custom button onto its own line. */
+
+      &:has(:checked) {
+        padding-block-end: 0;
+        /* When checked, remove bottom border so we can combine seamlessly with the amount input field. */
+        box-shadow:
+          0 -2px 0 0 var(--gl-color-accent),
+          -2px 0 0 0 var(--gl-color-accent),
+          2px 0 0 0 var(--gl-color-accent);
+        border-end-end-radius: 0;
+        border-end-start-radius: 0;
+        border-block-end: none;
+      }
+    }
+  }
+
+  /* Fieldset: a radio button group, where each radio button just looks like a regular button */
+  fieldset {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: start;
+    width: 100%;
+    gap: var(--gl-spacing-xs); /* space button radio buttons, in both dimensions */
   }
 
   /* Specific styling for the Custom Amount input field (not the radio button). */
@@ -404,18 +400,10 @@
       }
     }
 
-    /* By default, style the field as a standalone input. */
-    :not(fieldset) + & {
-      .gl-other-label-1 { display: none; }  /* turn off "Custom Amount:" sr-only text */
-      .gl-other-label-2 { display: block; } /* turn on "Donation Amount: text */
-    }
-
     /* If there are amount radio buttons before me, style it so that it looks like the
         bottom half of the custom amount radio button.
       */
     fieldset + & {
-      .gl-other-label-1 { display: inline; } /* turn on "Custom Amount:" sr-only text */
-      .gl-other-label-2 { display: none; }   /* turn off "Donation Amount: text */
       padding: var(--gl-spacing-xs) var(--gl-spacing-sm);
 
       /* Set styles so that the label looks like part of the last button in the fieldset. */
@@ -458,7 +446,7 @@
     width: 100%;
 
     .gl-err {
-      margin-block: var(--gl-spacing-2xs);
+      margin-block: var(--gl-spacing-xs);
       width: 100%;
       text-align: center;
       font-size: 0.9em;

@@ -254,6 +254,40 @@ const makeAmountRadios = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string
   ;
 };
 
+const makeAmountInput = (iopt: CreateHTMLOptions, curr: CurrencyFormat, hasButtons?: boolean): string => {
+  const ret: string[] = [];
+
+  // If there's only on suggested value, prefill the amount input box with it.
+  let defaultValue;
+  if (iopt.suggestedAmounts?.length === 1) {
+    defaultValue = String(iopt.suggestedAmounts[0]);
+  }
+
+  // Add the input box that lets users enter a custom donation amount.
+  ret.push(`
+      <label for="gl-other-input${iopt.suffix}" class="gl-other-input">`);
+  if (hasButtons) {
+    ret.push(`
+        <div class="sr-only">Custom amount in ${curr.namePlural}</div>`
+    );
+  } else {
+    ret.push(`
+        <div>
+          <span>Donation amount<span class="sr-only"> in ${curr.namePlural}</span>
+        </div>`
+    );
+  }
+  ret.push(`
+        <div class="gl-focus-container">
+          <span aria-hidden="true">${curr.symbol}</span>
+          <input type="text" id="gl-other-input${iopt.suffix}" inputmode="numeric" name="otherAmount" required ${attr("value", defaultValue)} />
+          <span aria-hidden="true">${iopt.currencyCode}</span>
+        </div>
+      </label>`
+  );
+  return ret.join("\n");
+}
+
 const makeAmountField = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string => {
   const ret: string[] = [];
 
@@ -267,27 +301,8 @@ const makeAmountField = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string 
       </fieldset>`
     );
   }
-
-  // If there's only on suggested value, prefill the amount input box with it.
-  let defaultValue;
-  if (iopt.suggestedAmounts?.length === 1) {
-    defaultValue = String(iopt.suggestedAmounts[0]);
-  }
-
-  // Add the input box that lets users enter a custom donation amount.
-  ret.push(`
-      <label for="gl-other-input${iopt.suffix}" class="gl-other-input">
-        <span class="gl-other-label-1 sr-only">Custom amount in ${curr.namePlural}</span>
-        <div class="gl-other-label-2">
-          <span>Donation amount<span class="sr-only"> in ${curr.namePlural}</span>
-        </div>
-        <div class="gl-focus-container">
-          <span aria-hidden="true">${curr.symbol}</span>
-          <input type="text" id="gl-other-input${iopt.suffix}" inputmode="numeric" name="otherAmount" required ${attr("value", defaultValue)} />
-          <span aria-hidden="true">${iopt.currencyCode}</span>
-        </div>
-      </label>`
-  );
+  
+  ret.push(makeAmountInput(iopt, curr, hasButtons));
 
   // Add the div used to report any errors that occur with the amount field.
   // Alert triangle icon obtained from here: https://tabler.io/icons?icon=alert-triangle
