@@ -139,14 +139,16 @@ export interface CreateHTMLOptions {
   suffix?: string,
 };
 
+const classFocus = "gl-focus-container";
+
 const frequencyButtons = [
-  { title: "One-Time", value: "one-time", id: "gl-freq-onetime" },
-  { title: "Monthly",  value: "monthly",  id: "gl-freq-monthly", className: "gl-freq-recurring" }
+  { title: "One-Time", value: "one-time", id: "gl-freq-onetime", className: classFocus },
+  { title: "Monthly",  value: "monthly",  id: "gl-freq-monthly", className: classFocus + " gl-freq-recurring" }
 ];
 
 const dedicationButtons = [
-  { title: "In Honor Of",  value: "InHonorOfDedication",  id: "gl-ded-honor" },
-  { title: "In Memory Of", value: "InMemoryOfDedication", id: "gl-ded-memory" },
+  { title: "In Honor Of",  value: "InHonorOfDedication",  id: "gl-ded-honor", className: classFocus },
+  { title: "In Memory Of", value: "InMemoryOfDedication", id: "gl-ded-memory", className: classFocus },
 ];
 
 // Utils and info for the selected currency and locale.
@@ -223,7 +225,7 @@ const makeAmountRadios = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string
     alt: curr.withName.format(amount),
     value: String(Math.ceil(amount)),
     id: "gl-amt-" + amount + iopt.suffix,
-    className: separateRecurring? "gl-amt-value-onetime" : undefined,
+    className: classFocus + (separateRecurring? " gl-amt-value-onetime" : ""),
   }}) || [];
   const firstRecurringIdx = amountButtons.length;
   if (separateRecurring) {
@@ -232,7 +234,7 @@ const makeAmountRadios = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string
       alt: curr.withName.format(amount),
       value: String(Math.ceil(amount)),
       id: "gl-amt-recurring-" + amount + iopt.suffix,
-      className: "gl-amt-value-recurring",
+      className: classFocus + " gl-amt-value-recurring",
     }));
   }
 
@@ -240,17 +242,17 @@ const makeAmountRadios = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string
   const firstVisibleIdx = (initRecurring && separateRecurring)? firstRecurringIdx : 0;
 
   return amountButtons.map((amt, idx) => `
-        <label ${attr("for", amt.id)} ${attr("class", amt.className)}>
-          <input type="radio" ${attr("id", amt.id)} name="amount" ${attr("value", amt.value)} ${attr("checked", iopt.startWithAmountSelected && idx===firstVisibleIdx)}/>
-          <span aria-hidden="true">${amt.title}</span>
-          <span class="sr-only">${amt.alt}</span>
-        </label>`
+          <label ${attr("for", amt.id)} ${attr("class", amt.className)}>
+            <input type="radio" ${attr("id", amt.id)} name="amount" ${attr("value", amt.value)} ${attr("checked", iopt.startWithAmountSelected && idx===firstVisibleIdx)}/>
+            <span aria-hidden="true">${amt.title}</span>
+            <span class="sr-only">${amt.alt}</span>
+          </label>`
   ).join("\n") + `
 
-        <label for="gl-amt-other${iopt.suffix}" class="gl-amt-other">
-          <input type="radio" id="gl-amt-other${iopt.suffix}" name="amount" value="other"/>
-          Custom Amount
-        </label>`
+          <label for="gl-amt-other${iopt.suffix}" ${attr("class", classFocus + " gl-amt-other")}>
+            <input type="radio" id="gl-amt-other${iopt.suffix}" name="amount" value="other"/>
+            Custom Amount
+          </label>`
   ;
 };
 
@@ -265,25 +267,25 @@ const makeAmountInput = (iopt: CreateHTMLOptions, curr: CurrencyFormat, hasButto
 
   // Add the input box that lets users enter a custom donation amount.
   ret.push(`
-      <label for="gl-other-input${iopt.suffix}" class="gl-other-input">`);
+        <label for="gl-other-input${iopt.suffix}" class="gl-other-input">`);
   if (hasButtons) {
     ret.push(`
-        <div class="sr-only">Custom amount in ${curr.namePlural}</div>`
+          <div class="sr-only">Custom amount in ${curr.namePlural}</div>`
     );
   } else {
     ret.push(`
-        <div>
-          <span>Donation amount<span class="sr-only"> in ${curr.namePlural}</span>
-        </div>`
+          <div>
+            <span>Donation amount<span class="sr-only"> in ${curr.namePlural}</span>
+          </div>`
     );
   }
   ret.push(`
-        <div class="gl-focus-container">
-          <span aria-hidden="true">${curr.symbol}</span>
-          <input type="text" id="gl-other-input${iopt.suffix}" inputmode="numeric" name="otherAmount" required ${attr("value", defaultValue)} />
-          <span aria-hidden="true">${iopt.currencyCode}</span>
-        </div>
-      </label>`
+          <div class="${classFocus}">
+            <span aria-hidden="true">${curr.symbol}</span>
+            <input type="text" id="gl-other-input${iopt.suffix}" inputmode="numeric" name="otherAmount" required ${attr("value", defaultValue)} />
+            <span aria-hidden="true">${iopt.currencyCode}</span>
+          </div>
+        </label>`
   );
   return ret.join("\n");
 }
@@ -295,14 +297,17 @@ const makeAmountField = (iopt: CreateHTMLOptions, curr: CurrencyFormat): string 
   const hasButtons = iopt.suggestedAmounts && iopt.suggestedAmounts.length > 1;
   if (hasButtons) {
     ret.push(
-      `<fieldset class="gl-focus-container">
+      `<fieldset>
         <legend class="sr-only">Donation Amount</legend>
-        ${makeAmountRadios(iopt, curr)}
+        <div class="gl-radios">
+          ${makeAmountRadios(iopt, curr)}
+        </div>
+        ${makeAmountInput(iopt, curr, hasButtons)}
       </fieldset>`
     );
+  } else {
+    ret.push(makeAmountInput(iopt, curr, hasButtons));
   }
-  
-  ret.push(makeAmountInput(iopt, curr, hasButtons));
 
   // Add the div used to report any errors that occur with the amount field.
   // Alert triangle icon obtained from here: https://tabler.io/icons?icon=alert-triangle
@@ -375,7 +380,7 @@ const makeDedicationButton = (iopt: CreateHTMLOptions): string => {
 
 const makeDedicationTypeRadios = (iopt: CreateHTMLOptions): string => {
   return dedicationButtons.map((ded, idx) => `
-        <label ${attr("for", ded.id+iopt.suffix)}>
+        <label ${attr("for", ded.id+iopt.suffix)} ${attr("class", ded.className)}>
           <input type="radio" ${attr("id", ded.id+iopt.suffix)} name="type" ${attr("value",ded.value)} ${attr("checked", idx === 0)}/>
           ${ded.title}
         </label>`
@@ -431,7 +436,7 @@ const makeDedicationModal = (iopt: CreateHTMLOptions): string => {
     </button>
 
     <form novalidate ${attr("aria-label", ariaLabel)} ${pmFormAttrs}>
-      <fieldset class="gl-focus-container">
+      <fieldset>
         <legend class="sr-only">Dedication Type</legend>
         ${makeDedicationTypeRadios(iopt)}
       </fieldset>
@@ -511,7 +516,7 @@ export const createHTML = (opt: CreateHTMLOptions): string => {
     ${attr("data-currency", iopt.currencyCode)}
     ${attr("aria-label", iopt.ariaLabel)}
   >
-    <fieldset class="gl-focus-container gl-frequency">
+    <fieldset class="gl-frequency">
       <legend class="sr-only">Donation Frequency</legend>
       ${makeFrequencyRadios(iopt)}
     </fieldset>

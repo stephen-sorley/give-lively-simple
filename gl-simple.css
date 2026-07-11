@@ -118,6 +118,12 @@
         outline-offset: -0.1875rem;
       }
     }
+
+    /* Add an additional ring around radio group fieldsets that contain focus.  */
+    fieldset:has([type="radio"]:focus-visible) {
+      outline: 1px solid color-mix(in oklch, var(--gl-color-focus), var(--gl-color-bg) 30%);
+      outline-offset: 0.5rem;
+    }
   }
 
   /* force disable animations if user asks for it. */
@@ -298,6 +304,20 @@
     }
   }
 
+  /* Fieldset: a radio button group, may also contain a text input for dependent questions. */
+  fieldset:not(:has([type="text"])), div.gl-radios {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: var(--gl-spacing-xs); /* space button radio buttons, in both dimensions */
+  }
+  fieldset:has([type="text"]) {
+    display: block;
+    width: 100%;
+  }
+
   /* Radio buttons and labels. */
   label:has([type="radio"]) {
     /* Hide the radio buttons completely, only show the label that wraps them - the
@@ -369,16 +389,6 @@
     }
   }
 
-  /* Fieldset: a radio button group, where each radio button just looks like a regular button */
-  fieldset {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: start;
-    width: 100%;
-    gap: var(--gl-spacing-xs); /* space button radio buttons, in both dimensions */
-  }
-
   /* Specific styling for the Custom Amount input field (not the radio button). */
   label.gl-other-input {
     width: 100%;
@@ -400,10 +410,9 @@
       }
     }
 
-    /* If there are amount radio buttons before me, style it so that it looks like the
-        bottom half of the custom amount radio button.
-      */
-    fieldset + & {
+    /* If I'm inside a fieldset, style myself so that I look like the bottom half of the
+       custom amount radio button. */
+    fieldset & {
       padding: var(--gl-spacing-xs) var(--gl-spacing-sm);
 
       /* Set styles so that the label looks like part of the last button in the fieldset. */
@@ -422,8 +431,8 @@
       border-block-start: none;
     }
 
-    /* If there are amount radio buttons, show myself when the custom amount button is selected. */
-    fieldset:not(:has(.gl-amt-other input:checked)) + & {
+    /* If I'm inside a fieldset, and the custom amount button isn't checked, hide myself. */
+    fieldset:not(:has(.gl-amt-other input:checked)) & {
       display: none;
     }
   }
@@ -589,8 +598,11 @@
   /* error ring */
   [aria-invalid="true"]:not(.gl-focus-container *), /* I have aria-invalid="true" and I'm not inside a focus container, OR */
   .gl-focus-container:has([aria-invalid="true"]) {  /* I'm a focus container and a descendant has aria-invalid="true" */
-    outline: 3px solid var(--gl-color-error);
-    outline-offset: 4px;
+    /* don't show error ring when visibly focused */
+    &:not(:focus-visible):not(:has(:focus-visible)) {
+      outline: 0.1875rem solid var(--gl-color-error);
+      outline-offset: 0.25rem;
+    }
   }
 } /*END .gl-simple-donation-widget */
 

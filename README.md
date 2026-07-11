@@ -70,9 +70,9 @@ Minified versions of these files can be found in [`dist/`](dist). They have no e
 
 |  File   | Minified | Gzipped  |
 | ------- | -------- | -------- |
-| builder |  9.72 kB |  3.07 kB |
+| builder |  9.91 kB |  3.15 kB |
 | runtime |  5.86 kB |  2.38 kB |
-| css     |  9.93 kB |  2.75 kB |
+| css     | 10.23 kB |  2.81 kB |
 
 
 ## Integration
