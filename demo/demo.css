@@ -153,7 +153,7 @@ body {
   width: 100%;
   color: var(--color-fg);
   background-color: light-dark(#FFF, #000);
-  padding: 2rem;
+  padding: 1rem;
   margin-block-start: 1.75rem;
   border-radius: 4px;
   border: 1px solid var(--color-border);
