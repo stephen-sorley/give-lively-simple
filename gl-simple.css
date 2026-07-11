@@ -48,7 +48,7 @@
     --gl-spacing-md: 1.5em;
 
     --gl-duration: 120ms;
-    --gl-duration-long: calc(2.5 * var(--gl-duration)); /* used for dialog open/close transitions */
+    --gl-duration-long: calc(2 * var(--gl-duration)); /* used for dialog open/close transitions */
     
     --gl-widget-border: 2px solid var(--gl-color-accent);
     --gl-widget-shadow: /* applied to whole widget, and to dialog windows */
@@ -536,7 +536,7 @@
     &:not([open]),
     &.gl-is-closing { /* workaround for Safari bug - Safari hides the dialog immediately on close and does not perform the exit transition. */
       opacity: 0;
-      transform: translate(-47%, -50%);
+      transform: translate(-50%, -50%) scale(0.95);
       &::backdrop {
         background-color: transparent;
         backdrop-filter: blur(0px);
@@ -546,7 +546,7 @@
     /* Step 2: open */
     &[open]:not(.gl-is-closing) {
       opacity: 1;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%) scale(1);
       &::backdrop {
         background-color: rgba(0, 0, 0, 0.7);
         backdrop-filter: blur(3px);
@@ -558,7 +558,7 @@
       /* Step 1: on the way in */
       @starting-style {
         opacity: 0;
-        transform: translate(-53%, -50%);
+        transform: translate(-50%, -50%) scale(0.95);
         &::backdrop {
           background-color: transparent;
           backdrop-filter: blur(0px);
