@@ -311,6 +311,7 @@
     justify-content: start;
     width: 100%;
     flex-wrap: wrap;
+    flex-wrap: balance; /* only supported in Chrome so far, will fall back to wrap if unsupported */
     gap: var(--gl-spacing-xs); /* space button radio buttons, in both dimensions */
   }
   fieldset:has([type="text"]) {
