@@ -72,7 +72,7 @@ Minified versions of these files can be found in [`dist/`](dist). They have no e
 | ------- | -------- | -------- |
 | builder |  9.91 kB |  3.15 kB |
 | runtime |  5.86 kB |  2.38 kB |
-| css     | 10.28 kB |  2.81 kB |
+| css     | 10.28 kB |  2.82 kB |
 
 
 ## Integration

@@ -223,15 +223,14 @@
 
   
   /* Set spacing between any combination of fieldsets, error groups, and buttons. */
-  :where(fieldset, .gl-err-group, button) + :where(fieldset, .gl-err-group, button) {
+  :where(fieldset, button) + :where(fieldset, .gl-err-group, button) {
     margin-block-start: var(--gl-spacing-md);
   }
 
   /* Set smaller spacing between buttons. */
-  button + button {
+  :where(button, .gl-err-group) + button {
     margin-block-start: var(--gl-spacing-sm);
   }
-
 
   button {
     display: flex;
